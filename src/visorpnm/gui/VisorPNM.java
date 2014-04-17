@@ -22,6 +22,7 @@ public class VisorPNM extends javax.swing.JFrame {
      */
     public VisorPNM() {
         initComponents();
+        setLocationRelativeTo(null);
     }
 
     /**
@@ -37,14 +38,13 @@ public class VisorPNM extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         menuAbrir = new javax.swing.JMenuItem();
-        menuGuardar = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
         menuSalir = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("VisorPNM");
-        setPreferredSize(new java.awt.Dimension(650, 650));
+        setPreferredSize(new java.awt.Dimension(276, 336));
+        setResizable(false);
 
         panelDraw.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -70,18 +70,17 @@ public class VisorPNM extends javax.swing.JFrame {
             }
         });
         jMenu1.add(menuAbrir);
-
-        menuGuardar.setText("Guardar");
-        jMenu1.add(menuGuardar);
         jMenu1.add(jSeparator1);
 
         menuSalir.setText("Salir");
+        menuSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuSalirActionPerformed(evt);
+            }
+        });
         jMenu1.add(menuSalir);
 
         jMenuBar1.add(jMenu1);
-
-        jMenu2.setText("Edicion");
-        jMenuBar1.add(jMenu2);
 
         setJMenuBar(jMenuBar1);
 
@@ -93,6 +92,11 @@ public class VisorPNM extends javax.swing.JFrame {
         ControllerMenuAbrir.objVisor = this;
         ControllerMenuAbrir.actionPerformed(evt);
     }//GEN-LAST:event_menuAbrirActionPerformed
+
+    private void menuSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuSalirActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+    }//GEN-LAST:event_menuSalirActionPerformed
 
     /**
      * @param args the command line arguments
@@ -131,11 +135,9 @@ public class VisorPNM extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     public javax.swing.JMenuItem menuAbrir;
-    private javax.swing.JMenuItem menuGuardar;
     private javax.swing.JMenuItem menuSalir;
     public javax.swing.JPanel panelDraw;
     // End of variables declaration//GEN-END:variables

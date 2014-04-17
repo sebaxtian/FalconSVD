@@ -22,6 +22,6 @@ public class VisorPNM {
     public static void main(String[] args) {
         // TODO code application logic here
         System.out.println("Hola VisorPNM !!");
-        
+        visorpnm.gui.VisorPNM.main(args);
     }
 }
