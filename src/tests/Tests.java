@@ -100,9 +100,66 @@ public class Tests {
         }
     }
     
+    public static void pruebaMatrixDB() {
+        double[][] a = {{8, 5},
+                        {1, 9},
+                        {3, 0}};
+        double[][] b = {{2, 4},
+                        {1, 3},
+                        {0, 0}};
+        
+        Matrix matrixA = new Matrix(a);
+        Matrix matrixB = new Matrix(b);
+        
+        imprimirMatrix(matrixA);
+        imprimirMatrix(matrixB);
+        
+        double matrixColumA[] = matrixA.getColumnPackedCopy();
+        double matrixRowA[] = matrixA.getRowPackedCopy();
+        
+        double matrixColumB[] = matrixB.getColumnPackedCopy();
+        double matrixRowB[] = matrixB.getRowPackedCopy();
+        
+        System.out.println("Matriz Colum A: ");
+        imprimirVector(matrixColumA);
+        System.out.println("Matriz Row A: ");
+        imprimirVector(matrixRowA);
+        
+        System.out.println("Matriz Colum B: ");
+        imprimirVector(matrixColumB);
+        System.out.println("Matriz Row B: ");
+        imprimirVector(matrixRowB);
+        
+        int numVal = matrixA.getRowDimension()*matrixA.getColumnDimension();
+        Matrix matrixC = new Matrix(numVal, 2);
+        
+        
+        Matrix matrixFila = new Matrix(matrixRowA, matrixRowA.length);
+        
+        matrixC.setMatrix(0, numVal-1, 0, 0, matrixFila);
+        
+        matrixFila = new Matrix(matrixRowB, matrixRowB.length);
+        
+        matrixC.setMatrix(0, numVal-1, 1, 1, matrixFila);
+        
+        imprimirMatrix(matrixC);
+        
+        double valor = 56;
+        valor /= 3;
+        System.out.println(""+valor);
+    }
+    
+    public static void imprimirVector(double[] vector) {
+        for (int i = 0; i < vector.length; i++) {
+            System.out.print("\t"+vector[i]);
+        }
+        System.out.println("");
+    }
+    
     
     public static void main(String[] args) {
         System.out.println("--> Prueba SVD");
-        pruebaSVD();
+        //pruebaSVD();
+        pruebaMatrixDB();
     }
 }
