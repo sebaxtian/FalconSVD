@@ -33,6 +33,7 @@ public class DBImages {
     private ImagePNM[] pnmImages;
     private Matrix dbImages;
     private Matrix mediaImages;
+    private ImagePNM imageMedia;
     
     
     /**
@@ -64,14 +65,26 @@ public class DBImages {
         }
     }
     
-    
-    private void buildMediaImages() {
+    /**
+     * Metodo que construye una matrix de una sola columna donde se
+     * guardan los pixeles de la media de todas las imagenes del
+     * conjunto de imagenes.
+     */
+    public void buildMediaImages() {
         mediaImages = new Matrix(dbImages.getRowDimension(), 1);
         for (int k = 0; k < dbImages.getRowDimension(); k++) {
-            //Matrix rowPixels = dbImages.getMatrix(k, k, 0, k)
+            Matrix rowPixels = dbImages.getMatrix(k, k, 0, k);
+            mediaImages.set(k, 0, getMedia(rowPixels));
         }
     }
     
+    /**
+     * Metodo que permite calcular el valor de la media para una
+     * fila de pixeles de la matrix de imagenes.
+     * 
+     * @param rowPixels
+     * @return 
+     */
     private double getMedia(Matrix rowPixels) {
         double media = 0;
         for (int i = 0; i < rowPixels.getColumnDimension(); i++) {
@@ -81,14 +94,48 @@ public class DBImages {
         return media;
     }
     
+    public ImagePNM getImageMedia() {
+        String codMagic = pnmImages[0].getCodMagic();
+        String description = pnmImages[0].getDescription();
+        int rows = pnmImages[0].getRows();
+        int colums = pnmImages[0].getColums();
+        int intensity = pnmImages[0].getIntensity();
+        Matrix imageMatrix = new Matrix(rows, colums);
+        
+        // construye la matrix de imagen
+        int j0 = 0;
+        int j1 = rows-1;
+        for (int i = 0; i < rows; i++) {
+            Matrix rowImage = mediaImages.getMatrix(j0, j1, 0, 0);
+            imageMatrix.setMatrix(i, i, 0, colums, rowImage);
+            j0 += rows;
+            j1 += rows;
+        }
+        
+        // construye el objeto de imagen PNM
+        imageMedia = new ImagePNM(codMagic, description, rows, colums, intensity, imageMatrix);
+        
+        return imageMedia;
+    }
+    
     /**
      * Permite obtener el objeto Matrix que representa la base de datos
      * del conjunto de imagenes.
      * 
      * @return Matrix
      */
-    public Matrix getDBImages() {
+    public Matrix getMatrixDBImages() {
         return dbImages;
+    }
+    
+    /**
+     * Permite obtener el objeto Matrix que representa la imagen de 
+     * la media del conjunto de imagenes.
+     * 
+     * @return  Matrix
+     */
+    public Matrix getMatrixMediaImages() {
+        return mediaImages;
     }
     
 }
