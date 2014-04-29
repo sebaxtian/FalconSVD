@@ -4,12 +4,17 @@
  * and open the template in the editor.
  */
 
-package visorpnm.model;
+package falconsvd.model;
 
 import Jama.Matrix;
-import falconsvd.model.ImagePNM;
+import falconsvd.controller.ControllerOpenTarget;
+import falconsvd.gui.FalconSVD;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.image.BufferedImage;
 import javax.swing.JPanel;
 
@@ -27,23 +32,28 @@ public class DrawImagePNM {
     /**
      * Atributos de clase.
      */
-    private JPanel objPanel;
-    private ImagePNM imagePNM;
+    public JPanel objPanel;
+    public ImagePNM imagePNM;
     
     /**
-     * Metodo constructor de clase.
+     * Metodo constructor de clase que recibe como argumentos
+     * un objeto ImagePNM y un objeto tipo JPanel donde sera
+     * dibujada la imagen.
      * 
      * @param imagePNM
      * @param objPanel 
      */
     public DrawImagePNM(ImagePNM imagePNM, JPanel objPanel) {
-        this.objPanel = objPanel;
         this.imagePNM = imagePNM;
+        this.objPanel = objPanel;
     }
     
-    
+    /**
+     * Este metodo se encarga de pintar sobre un objeto JPanel
+     * un objeto ImagePNM que contiene la representacion de una
+     * imagen en formato PNM.
+     */
     public void draw() {
-        
         String codMagic = imagePNM.getCodMagic();
         Matrix matrix = imagePNM.getMatrix();
         int rows = matrix.getRowDimension();
@@ -95,6 +105,6 @@ public class DrawImagePNM {
         Graphics g = objPanel.getGraphics();
         g.drawImage(resizedImage, 0, 0, objPanel);
         g.dispose();
+        
     }
-    
 }
