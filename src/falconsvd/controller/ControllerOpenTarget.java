@@ -7,8 +7,10 @@
 package falconsvd.controller;
 
 import falconsvd.gui.FalconSVD;
-import falconsvd.model.DrawImagePNM;
+import falconsvd.model.CanvasPNM;
 import falconsvd.model.FilePNM;
+import falconsvd.model.ImagePNM;
+import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import javax.swing.JFileChooser;
@@ -27,9 +29,7 @@ import static visorpnm.controller.ControllerMenuAbrir.objVisor;
 
 public class ControllerOpenTarget {
 
-    public static FalconSVD GUIfalconSVD;
     public static FilePNM filePNMTarget;
-    public static DrawImagePNM drawImagePNM;
     
     public static void actionPerformed(ActionEvent e) {
         JFileChooser fileChooser = new JFileChooser("faces/");
@@ -40,10 +40,12 @@ public class ControllerOpenTarget {
             File file = fileChooser.getSelectedFile();
             filePNMTarget = new FilePNM(file.getAbsolutePath());
             filePNMTarget.openFile();
+            ImagePNM imagePNM = filePNMTarget.getImagePNM();
             // draw image on Panel
-            drawImagePNM = new DrawImagePNM(filePNMTarget.getImagePNM(), GUIfalconSVD.panelDrawTarget);
-            drawImagePNM.draw();
+            CanvasPNM canvasPNM = new CanvasPNM(imagePNM, FalconSVD.panelDrawTarget.getSize());
+            FalconSVD.panelDrawTarget.removeAll();
+            FalconSVD.panelDrawTarget.add(canvasPNM, BorderLayout.CENTER);
+            canvasPNM.repaint();
         }
     }
-    
 }

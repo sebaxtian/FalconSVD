@@ -34,10 +34,13 @@ public class FalconSVD extends javax.swing.JFrame {
         tabbedPanel = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         panelDrawTarget = new javax.swing.JPanel();
+        canvasTarget = new java.awt.Canvas();
         jPanel2 = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
+        canvas2 = new java.awt.Canvas();
         jPanel3 = new javax.swing.JPanel();
         jPanel8 = new javax.swing.JPanel();
+        canvas3 = new java.awt.Canvas();
         jPanel4 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -68,17 +71,8 @@ public class FalconSVD extends javax.swing.JFrame {
 
         panelDrawTarget.setBackground(new java.awt.Color(254, 254, 254));
         panelDrawTarget.setPreferredSize(new java.awt.Dimension(240, 320));
-
-        javax.swing.GroupLayout panelDrawTargetLayout = new javax.swing.GroupLayout(panelDrawTarget);
-        panelDrawTarget.setLayout(panelDrawTargetLayout);
-        panelDrawTargetLayout.setHorizontalGroup(
-            panelDrawTargetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 240, Short.MAX_VALUE)
-        );
-        panelDrawTargetLayout.setVerticalGroup(
-            panelDrawTargetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 320, Short.MAX_VALUE)
-        );
+        panelDrawTarget.setLayout(new java.awt.BorderLayout());
+        panelDrawTarget.add(canvasTarget, java.awt.BorderLayout.CENTER);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -101,17 +95,8 @@ public class FalconSVD extends javax.swing.JFrame {
 
         jPanel7.setBackground(new java.awt.Color(254, 254, 254));
         jPanel7.setPreferredSize(new java.awt.Dimension(240, 320));
-
-        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
-        jPanel7.setLayout(jPanel7Layout);
-        jPanel7Layout.setHorizontalGroup(
-            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 240, Short.MAX_VALUE)
-        );
-        jPanel7Layout.setVerticalGroup(
-            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 320, Short.MAX_VALUE)
-        );
+        jPanel7.setLayout(new java.awt.BorderLayout());
+        jPanel7.add(canvas2, java.awt.BorderLayout.CENTER);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -134,17 +119,8 @@ public class FalconSVD extends javax.swing.JFrame {
 
         jPanel8.setBackground(new java.awt.Color(254, 254, 254));
         jPanel8.setPreferredSize(new java.awt.Dimension(240, 320));
-
-        javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
-        jPanel8.setLayout(jPanel8Layout);
-        jPanel8Layout.setHorizontalGroup(
-            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 240, Short.MAX_VALUE)
-        );
-        jPanel8Layout.setVerticalGroup(
-            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 320, Short.MAX_VALUE)
-        );
+        jPanel8.setLayout(new java.awt.BorderLayout());
+        jPanel8.add(canvas3, java.awt.BorderLayout.CENTER);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -285,7 +261,6 @@ public class FalconSVD extends javax.swing.JFrame {
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         // TODO add your handling code here:
-        ControllerOpenTarget.GUIfalconSVD = this;
         ControllerOpenTarget.actionPerformed(evt);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
@@ -325,6 +300,9 @@ public class FalconSVD extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private java.awt.Canvas canvas2;
+    private java.awt.Canvas canvas3;
+    public static java.awt.Canvas canvasTarget;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
@@ -352,7 +330,7 @@ public class FalconSVD extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JTextArea jTextArea1;
-    public javax.swing.JPanel panelDrawTarget;
+    public static javax.swing.JPanel panelDrawTarget;
     public static javax.swing.JTabbedPane tabbedPanel;
     // End of variables declaration//GEN-END:variables
 }
