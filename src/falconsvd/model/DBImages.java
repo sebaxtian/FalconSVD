@@ -7,6 +7,7 @@
 package falconsvd.model;
 
 import Jama.Matrix;
+import java.util.ArrayList;
 
 /**
  * Esta clase construye una matriz de imagenes apartir
@@ -30,7 +31,7 @@ public class DBImages {
     /**
      * Atributos de clase
      */
-    private ImagePNM[] pnmImages;
+    private ArrayList<ImagePNM> pnmImages;
     private Matrix dbImages;
     private Matrix mediaImages;
     private ImagePNM imageMedia;
@@ -42,7 +43,7 @@ public class DBImages {
      * 
      * @param pnmImages 
      */
-    public DBImages(ImagePNM[] pnmImages) {
+    public DBImages(ArrayList<ImagePNM> pnmImages) {
         this.pnmImages = pnmImages;
     }
     
@@ -52,14 +53,14 @@ public class DBImages {
      * los pixeles de cada imagen del conjunto de imagenes.
      */
     public void buildDBImages() {
-        int rows = pnmImages[0].getRows();
-        int colums = pnmImages[0].getColums();
+        int rows = pnmImages.get(0).getRows();
+        int colums = pnmImages.get(0).getColums();
         int numPixels = rows * colums;
-        int numImages = pnmImages.length;
+        int numImages = pnmImages.size();
         // matriz que representa la base de datos
         dbImages = new Matrix(numPixels, numImages);
         for (int k = 0; k < numImages; k++) {
-            double[] pixels = pnmImages[k].getMatrix().getRowPackedCopy();
+            double[] pixels = pnmImages.get(k).getMatrix().getRowPackedCopy();
             Matrix matrixPixels = new Matrix(pixels, numPixels);
             dbImages.setMatrix(0, numPixels-1, k, k, matrixPixels);
         }
@@ -73,7 +74,7 @@ public class DBImages {
     public void buildMediaImages() {
         mediaImages = new Matrix(dbImages.getRowDimension(), 1);
         for (int k = 0; k < dbImages.getRowDimension(); k++) {
-            Matrix rowPixels = dbImages.getMatrix(k, k, 0, k);
+            Matrix rowPixels = dbImages.getMatrix(k, k, 0, dbImages.getColumnDimension()-1);
             mediaImages.set(k, 0, getMedia(rowPixels));
         }
     }
@@ -95,21 +96,23 @@ public class DBImages {
     }
     
     public ImagePNM getImageMedia() {
-        String codMagic = pnmImages[0].getCodMagic();
-        String description = pnmImages[0].getDescription();
-        int rows = pnmImages[0].getRows();
-        int colums = pnmImages[0].getColums();
-        int intensity = pnmImages[0].getIntensity();
+        String codMagic = pnmImages.get(0).getCodMagic();
+        String description = pnmImages.get(0).getDescription();
+        int rows = pnmImages.get(0).getRows();
+        int colums = pnmImages.get(0).getColums();
+        int intensity = pnmImages.get(0).getIntensity();
+        
         Matrix imageMatrix = new Matrix(rows, colums);
         
         // construye la matrix de imagen
         int j0 = 0;
-        int j1 = rows-1;
+        int j1 = colums-1;
         for (int i = 0; i < rows; i++) {
             Matrix rowImage = mediaImages.getMatrix(j0, j1, 0, 0);
-            imageMatrix.setMatrix(i, i, 0, colums, rowImage);
-            j0 += rows;
-            j1 += rows;
+            rowImage = rowImage.transpose();
+            imageMatrix.setMatrix(i, i, 0, colums-1, rowImage);
+            j0 += colums;
+            j1 += colums;
         }
         
         // construye el objeto de imagen PNM

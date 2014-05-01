@@ -29,8 +29,7 @@ public class LoadImagesPNM {
     /**
      * Atributos de clase.
      */
-    private ImagePNM[] pnmImages;
-    private ArrayList<ImagePNM> pnmImagess;
+    private ArrayList<ImagePNM> pnmImages;
     private File dirDB;
     
     /**
@@ -42,7 +41,7 @@ public class LoadImagesPNM {
      */
     public LoadImagesPNM(String URI) {
         this.dirDB = new File(URI);
-        pnmImagess = new ArrayList<>();
+        pnmImages = new ArrayList<>();
     }
     
     /**
@@ -60,7 +59,7 @@ public class LoadImagesPNM {
                     filePNM.openFile();
                     ImagePNM imagePNM = filePNM.getImagePNM();
                     // agrega cada imagen al arreglo
-                    pnmImagess.add(imagePNM);
+                    pnmImages.add(imagePNM);
                 }
             }
         }
@@ -72,8 +71,12 @@ public class LoadImagesPNM {
      * 
      * @return ImagePNM[]
      */
-    public ImagePNM[] getArrayImages() {
-        return (ImagePNM[])pnmImagess.toArray();
+    public ImagePNM[] getArrayImagess() {
+        return (ImagePNM[])pnmImages.toArray();
+    }
+    
+    public ArrayList<ImagePNM> getArrayImages() {
+        return pnmImages;
     }
     
 }
