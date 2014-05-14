@@ -26,13 +26,14 @@ public class ControllerProcessRun {
     
     public static void actionPerformed(ActionEvent e) {
         Matrix matrixTarget = ControllerOpenTarget.imageTarget.getMatrix();
-        Matrix matrixMedia = ControllerSelectDB.dbImages.getMatrixMediaImages();
+        Matrix matrixMedia = ControllerSelectDB.dbImages.getImageMedia().getMatrix();
         double threshold = ControllerEditThreshold.threshold;
         FalconSVD falconSVD = new FalconSVD(matrixTarget, matrixMedia, threshold);
         falconSVD.runSVD();
-        System.out.println("Norma1 "+falconSVD.findImage(FalconSVD.NORMA1));
-        System.out.println("Norma2 "+falconSVD.findImage(FalconSVD.NORMA2));
-        System.out.println("NormaFrob "+falconSVD.findImage(FalconSVD.NORMAFrob));
-        System.out.println("NormaInf "+falconSVD.findImage(FalconSVD.NORMAInf));
+        
+        System.out.println("Norma1 "+falconSVD.findImage(FalconSVD.NORMA1)+"\n");
+        System.out.println("Norma2 "+falconSVD.findImage(FalconSVD.NORMA2)+"\n");
+        System.out.println("NormaFrob "+falconSVD.findImage(FalconSVD.NORMAFrob)+"\n");
+        System.out.println("NormaInf "+falconSVD.findImage(FalconSVD.NORMAInf)+"\n");
     }
 }

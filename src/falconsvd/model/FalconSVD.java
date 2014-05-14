@@ -28,7 +28,7 @@ public class FalconSVD {
     public static int NORMA2 = 2;
     public static int NORMAFrob = 3;
     public static int NORMAInf = 4;
-    private Matrix imageTarget;
+    private Matrix matrixTarget;
     private Matrix matrixMedia;
     private double threshold;
     private Matrix U;
@@ -43,10 +43,15 @@ public class FalconSVD {
      * @param matrixMedia
      * @param threshold 
      */
-    public FalconSVD(Matrix imageTarget, Matrix matrixMedia, double threshold) {
-        this.imageTarget = imageTarget;
+    public FalconSVD(Matrix matrixTarget, Matrix matrixMedia, double threshold) {
+        this.matrixTarget = matrixTarget;
         this.matrixMedia = matrixMedia;
         this.threshold = threshold;
+        // ---------------
+        Matrix matrixTargetColum = new Matrix(matrixTarget.getColumnPackedCopy(), 10304);
+        Matrix matrixMediaColum = new Matrix(matrixMedia.getColumnPackedCopy(), 10304);
+        this.matrixTarget = matrixTargetColum;
+        this.matrixMedia = matrixMediaColum;
     }
     
     
@@ -57,15 +62,14 @@ public class FalconSVD {
     public void runSVD() {
         SingularValueDecomposition SVD = matrixMedia.svd();
         S = SVD.getS();
-        V = SVD.getV();
-        U = SVD.getU().transpose();
-        imageTarget = new Matrix(imageTarget.getColumnPackedCopy(), 10304);
+        V = SVD.getV().transpose();
+        U = SVD.getU();
         
         System.out.println("S : filas = "+S.getRowDimension()+" columnas = "+S.getColumnDimension());
         System.out.println("V : filas = "+V.getRowDimension()+" columnas = "+V.getColumnDimension());
         System.out.println("U : filas = "+U.getRowDimension()+" columnas = "+U.getColumnDimension());
         System.out.println("matrixMedia : filas = "+matrixMedia.getRowDimension()+" columnas = "+matrixMedia.getColumnDimension());
-        System.out.println("imageTarget : filas = "+imageTarget.getRowDimension()+" columnas = "+imageTarget.getColumnDimension());
+        System.out.println("imageTarget : filas = "+matrixTarget.getRowDimension()+" columnas = "+matrixTarget.getColumnDimension());
     }
     
     
@@ -78,8 +82,9 @@ public class FalconSVD {
      */
     private double calcRange(int norma) {
         double range = Double.MAX_VALUE;
-        Matrix matrixProducto = U.times(matrixMedia);
-        Matrix diferencia = imageTarget.minus(matrixProducto);
+        Matrix matrixProducto = matrixMedia.times(V);
+        System.out.println("matrixProducto : filas = "+matrixProducto.getRowDimension()+" columnas = "+matrixProducto.getColumnDimension());
+        Matrix diferencia = matrixTarget.minus(matrixProducto);
         if(norma == NORMA1) {
             range = diferencia.norm1();
         }
@@ -92,6 +97,7 @@ public class FalconSVD {
         if(norma == NORMAInf) {
             range = diferencia.normInf();
         }
+        System.out.println("Range "+range);
         return range;
     }
     

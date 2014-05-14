@@ -71,7 +71,7 @@ public class ControllerSaveLog {
      * @param progress
      * @param message 
      */
-    private static void registerProgress(int progress, String message) {
+    private static void registerProgress(final int progress, final String message) {
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
