@@ -31,6 +31,8 @@ public class LoadImagesPNM {
      */
     private ArrayList<ImagePNM> pnmImages;
     private File dirDB;
+    public static int SOMEBODY = 1;
+    public static int PEOPLE = 2;
     
     /**
      * Metodo constructor de clase el cual tiene como parametro
@@ -47,8 +49,41 @@ public class LoadImagesPNM {
     /**
      * Este metodo carga las imagenes del directorio de DB
      * para almacenarlas en un arreglo.
+     * 
+     * @param option 
      */
-    public void load() {
+    public void load(int option) {
+        if(option == SOMEBODY) {
+            loadSomebody();
+        }
+        if(option == PEOPLE) {
+            loadPeople();
+        }
+    }
+    
+    /**
+     * Este metodo carga las imagenes para una persona en
+     * particular del directorio de DB y almacenarlas en un arreglo.
+     */
+    private void loadSomebody() {
+        File[] images = dirDB.listFiles();
+        for (File image : images) {
+            if (image.isFile()) {
+                String uriImage = image.getAbsolutePath();
+                FilePNM filePNM = new FilePNM(uriImage);
+                filePNM.openFile();
+                ImagePNM imagePNM = filePNM.getImagePNM();
+                // agrega cada imagen al arreglo
+                pnmImages.add(imagePNM);
+            }
+        }
+    }
+    
+    /**
+     * Este metodo carga las imagenes para un conjunto de personas
+     * del directorio de DB y almacenarlas en un arreglo.
+     */
+    private void loadPeople() {
         File[] subDirs = dirDB.listFiles();
         for (File subDirn : subDirs) {
             File[] images = subDirn.listFiles();

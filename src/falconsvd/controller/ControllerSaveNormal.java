@@ -7,10 +7,7 @@
 package falconsvd.controller;
 
 import falconsvd.gui.FalconSVD;
-import falconsvd.model.CanvasPNM;
 import falconsvd.model.FilePNM;
-import falconsvd.model.ImagePNM;
-import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import javax.swing.JFileChooser;
@@ -18,7 +15,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  * Esta es una clase controladora de eventos para el
- * elemento de menu 'Open Target' de la clase JFrame
+ * elemento de menu 'Save -> Media' de la clase JFrame
  * falconsvd.gui.FalconSVD.
  * 
  * @author sebaxtian
@@ -26,38 +23,28 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  */
 
 
-public class ControllerOpenTarget {
-
-    public static FilePNM filePNMTarget;
-    public static ImagePNM imageTarget;
+public class ControllerSaveNormal {
     
     public static void actionPerformed(ActionEvent e) {
         JFileChooser fileChooser = new JFileChooser("faces/");
         FileNameExtensionFilter filter = new FileNameExtensionFilter("PPM, PGM, PBM", "ppm", "pgm", "pbm");
         fileChooser.setFileFilter(filter);
-        int selection = fileChooser.showOpenDialog(FalconSVD.tabbedPanel);
+        int selection = fileChooser.showSaveDialog(FalconSVD.tabbedPanel);
         if(selection == JFileChooser.APPROVE_OPTION) {
             File file = fileChooser.getSelectedFile();
-            registerProgress(25, "Archivo de imagen seleccionado "+file.getName());
-            filePNMTarget = new FilePNM(file.getAbsolutePath());
-            filePNMTarget.openFile();
-            registerProgress(60, "Se ha leido con exito el archivo de imagen");
-            // draw image on Panel
-            imageTarget = filePNMTarget.getImagePNM();
-            CanvasPNM canvasPNM = new CanvasPNM(imageTarget, FalconSVD.panelDrawTarget.getSize());
-            FalconSVD.panelDrawTarget.removeAll();
-            FalconSVD.panelDrawTarget.add(canvasPNM, BorderLayout.CENTER);
-            canvasPNM.repaint();
-            registerProgress(100, "Se pinta la imagen sobre el canvas Target");
-            FalconSVD.menuSelectDBSomebody.setEnabled(true);
-            FalconSVD.menuSelectDBPeople.setEnabled(true);
-            FalconSVD.menuSaveLog.setEnabled(true);
+            registerProgress(25, "La imagen normal se guardara en el archivo "+file.getName());
+            FilePNM filePNM = new FilePNM(file.getAbsolutePath());
+            filePNM.setImagePNM(ControllerProcessNormal.imageNormal);
+            registerProgress(50, "Se inicia la configuracion y escritura del archivo");
+            filePNM.saveFile();
+            registerProgress(100, "El archivo de imagen normal se ha guardado con exito");
         }
     }
     
     /**
-     * Metodo que registra en el area de log el progreso de la lectura
-     * de la imagen objetivo y cuando se pinta sobre el canvas.
+     * Metodo que registra en el area de log el progreso de la construccion
+     * del archivo normal de las imagenes en el conjunto de imagenes de la DB y
+     * cuando se guarda el archivo.
      * 
      * @param progress
      * @param message 
@@ -68,7 +55,7 @@ public class ControllerOpenTarget {
             public void run() {
                 try {
                     Thread.sleep(300);
-                    FalconSVD.textAreaLog.append("OpenTarget::FalconSVD [OK]\t "+message+"\n");
+                    FalconSVD.textAreaLog.append("SaveNormal::FalconSVD [OK]\t "+message+"\n");
                     FalconSVD.progressBar.setValue(progress);
                     FalconSVD.progressBar.setString(progress+"%");
                     if(progress == 100) {
@@ -77,7 +64,7 @@ public class ControllerOpenTarget {
                         FalconSVD.progressBar.setString(0+"%");
                     }
                 } catch (InterruptedException ex) {
-                    FalconSVD.textAreaLog.append("OpenTarget::FalconSVD [ERROR]\t Error al dormir hilo");
+                    FalconSVD.textAreaLog.append("SaveNormal::FalconSVD [ERROR]\t Error al dormir hilo");
                 }
             }
         };

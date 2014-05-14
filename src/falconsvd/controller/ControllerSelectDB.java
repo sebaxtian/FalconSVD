@@ -29,7 +29,7 @@ public class ControllerSelectDB {
     
     public static DBImages dbImages;
     
-    public static void actionPerformed(ActionEvent e) {
+    public static void actionPerformed(ActionEvent e, int option) {
         JFileChooser fileChooser = new JFileChooser("faces/");
         fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         int selection = fileChooser.showOpenDialog(FalconSVD.tabbedPanel);
@@ -37,13 +37,23 @@ public class ControllerSelectDB {
             File dirDBImages = fileChooser.getSelectedFile();
             registerProgress(25, "Directorio DB de imagenes seleccionado "+dirDBImages.getName());
             LoadImagesPNM loadImagesPNM = new LoadImagesPNM(dirDBImages.getAbsolutePath());
-            loadImagesPNM.load();
+            try {
+                loadImagesPNM.load(option);
+            } catch(NullPointerException exc) {
+                registerProgress(100, "La estructura de la base de datos no es la correcta, por favor lea la documentacion.");
+            }
             ArrayList<ImagePNM> pnmImages = loadImagesPNM.getArrayImages();
-            registerProgress(50, "Las imagenes del directorio DB han sido leidas con exito");
-            dbImages = new DBImages(pnmImages);
-            dbImages.buildDBImages();
-            registerProgress(100, "La martix DB de imagenes ha sido construida con exito");
-            FalconSVD.menuProcessMedia.setEnabled(true);
+            if(pnmImages.size() > 0) {
+                registerProgress(50, "Las imagenes del directorio DB han sido leidas con exito");
+                registerProgress(70, "Numero de imagenes cargadas "+pnmImages.size());
+                dbImages = new DBImages(pnmImages);
+                dbImages.buildDBImages();
+                registerProgress(100, "La martix DB de imagenes ha sido construida con exito");
+                FalconSVD.menuProcessMedia.setEnabled(true);
+            } else {
+                registerProgress(80, "El directorio DB no contiene imagenes");
+                registerProgress(100, "La martix DB de imagenes no ha sido construida");
+            }
         }
     }
     

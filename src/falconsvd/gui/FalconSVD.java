@@ -9,7 +9,13 @@ package falconsvd.gui;
 import falconsvd.controller.ControllerEditThreshold;
 import falconsvd.controller.ControllerOpenTarget;
 import falconsvd.controller.ControllerProcessMedia;
+import falconsvd.controller.ControllerProcessNormal;
+import falconsvd.controller.ControllerProcessRun;
+import falconsvd.controller.ControllerSaveLog;
+import falconsvd.controller.ControllerSaveMedia;
+import falconsvd.controller.ControllerSaveNormal;
 import falconsvd.controller.ControllerSelectDB;
+import falconsvd.model.LoadImagesPNM;
 
 /**
  *
@@ -42,8 +48,8 @@ public class FalconSVD extends javax.swing.JFrame {
         panelDrawMedia = new javax.swing.JPanel();
         canvasMedia = new java.awt.Canvas();
         jPanel3 = new javax.swing.JPanel();
-        jPanel8 = new javax.swing.JPanel();
-        canvas3 = new java.awt.Canvas();
+        panelDrawNormal = new javax.swing.JPanel();
+        canvasNormal = new java.awt.Canvas();
         jPanel4 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -56,15 +62,17 @@ public class FalconSVD extends javax.swing.JFrame {
         jMenuItem3 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         menuThreshold = new javax.swing.JMenuItem();
-        menuSelectDB = new javax.swing.JMenuItem();
+        jMenu6 = new javax.swing.JMenu();
+        menuSelectDBSomebody = new javax.swing.JMenuItem();
+        menuSelectDBPeople = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         menuProcessMedia = new javax.swing.JMenuItem();
         menuProcessNormal = new javax.swing.JMenuItem();
         menuProcessRun = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
-        jMenuItem6 = new javax.swing.JMenuItem();
-        jMenuItem7 = new javax.swing.JMenuItem();
-        jMenuItem8 = new javax.swing.JMenuItem();
+        menuSaveMedia = new javax.swing.JMenuItem();
+        menuSaveNormal = new javax.swing.JMenuItem();
+        menuSaveLog = new javax.swing.JMenuItem();
         jMenu5 = new javax.swing.JMenu();
         jMenuItem9 = new javax.swing.JMenuItem();
         jMenuItem10 = new javax.swing.JMenuItem();
@@ -122,10 +130,10 @@ public class FalconSVD extends javax.swing.JFrame {
 
         tabbedPanel.addTab("Media", jPanel2);
 
-        jPanel8.setBackground(new java.awt.Color(254, 254, 254));
-        jPanel8.setPreferredSize(new java.awt.Dimension(240, 320));
-        jPanel8.setLayout(new java.awt.BorderLayout());
-        jPanel8.add(canvas3, java.awt.BorderLayout.CENTER);
+        panelDrawNormal.setBackground(new java.awt.Color(254, 254, 254));
+        panelDrawNormal.setPreferredSize(new java.awt.Dimension(240, 320));
+        panelDrawNormal.setLayout(new java.awt.BorderLayout());
+        panelDrawNormal.add(canvasNormal, java.awt.BorderLayout.CENTER);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -133,14 +141,14 @@ public class FalconSVD extends javax.swing.JFrame {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(panelDrawNormal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(panelDrawNormal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -217,13 +225,27 @@ public class FalconSVD extends javax.swing.JFrame {
         });
         jMenu2.add(menuThreshold);
 
-        menuSelectDB.setText("Select DB");
-        menuSelectDB.addActionListener(new java.awt.event.ActionListener() {
+        jMenu6.setText("Select DB");
+
+        menuSelectDBSomebody.setText("Somebody");
+        menuSelectDBSomebody.setEnabled(false);
+        menuSelectDBSomebody.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuSelectDBActionPerformed(evt);
+                menuSelectDBSomebodyActionPerformed(evt);
             }
         });
-        jMenu2.add(menuSelectDB);
+        jMenu6.add(menuSelectDBSomebody);
+
+        menuSelectDBPeople.setText("People");
+        menuSelectDBPeople.setEnabled(false);
+        menuSelectDBPeople.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuSelectDBPeopleActionPerformed(evt);
+            }
+        });
+        jMenu6.add(menuSelectDBPeople);
+
+        jMenu2.add(jMenu6);
 
         jMenuBar1.add(jMenu2);
 
@@ -241,31 +263,56 @@ public class FalconSVD extends javax.swing.JFrame {
 
         menuProcessNormal.setText("Normal");
         menuProcessNormal.setEnabled(false);
+        menuProcessNormal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuProcessNormalActionPerformed(evt);
+            }
+        });
         jMenu3.add(menuProcessNormal);
 
         menuProcessRun.setText("Run");
         menuProcessRun.setToolTipText("run the process");
         menuProcessRun.setEnabled(false);
+        menuProcessRun.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuProcessRunActionPerformed(evt);
+            }
+        });
         jMenu3.add(menuProcessRun);
 
         jMenuBar1.add(jMenu3);
 
         jMenu4.setText("Save");
 
-        jMenuItem6.setText("Media");
-        jMenuItem6.setToolTipText("save the media image");
-        jMenuItem6.setEnabled(false);
-        jMenu4.add(jMenuItem6);
+        menuSaveMedia.setText("Media");
+        menuSaveMedia.setToolTipText("save the media image");
+        menuSaveMedia.setEnabled(false);
+        menuSaveMedia.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuSaveMediaActionPerformed(evt);
+            }
+        });
+        jMenu4.add(menuSaveMedia);
 
-        jMenuItem7.setText("Normal");
-        jMenuItem7.setToolTipText("save the normal image");
-        jMenuItem7.setEnabled(false);
-        jMenu4.add(jMenuItem7);
+        menuSaveNormal.setText("Normal");
+        menuSaveNormal.setToolTipText("save the normal image");
+        menuSaveNormal.setEnabled(false);
+        menuSaveNormal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuSaveNormalActionPerformed(evt);
+            }
+        });
+        jMenu4.add(menuSaveNormal);
 
-        jMenuItem8.setText("log");
-        jMenuItem8.setToolTipText("save the log file");
-        jMenuItem8.setEnabled(false);
-        jMenu4.add(jMenuItem8);
+        menuSaveLog.setText("log");
+        menuSaveLog.setToolTipText("save the log file");
+        menuSaveLog.setEnabled(false);
+        menuSaveLog.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuSaveLogActionPerformed(evt);
+            }
+        });
+        jMenu4.add(menuSaveLog);
 
         jMenuBar1.add(jMenu4);
 
@@ -299,15 +346,45 @@ public class FalconSVD extends javax.swing.JFrame {
         ControllerEditThreshold.actionPerformed(evt);
     }//GEN-LAST:event_menuThresholdActionPerformed
 
-    private void menuSelectDBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuSelectDBActionPerformed
-        // TODO add your handling code here:
-        ControllerSelectDB.actionPerformed(evt);
-    }//GEN-LAST:event_menuSelectDBActionPerformed
-
     private void menuProcessMediaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuProcessMediaActionPerformed
         // TODO add your handling code here:
         ControllerProcessMedia.actionPerformed(evt);
     }//GEN-LAST:event_menuProcessMediaActionPerformed
+
+    private void menuSelectDBSomebodyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuSelectDBSomebodyActionPerformed
+        // TODO add your handling code here:
+        ControllerSelectDB.actionPerformed(evt, LoadImagesPNM.SOMEBODY);
+    }//GEN-LAST:event_menuSelectDBSomebodyActionPerformed
+
+    private void menuSelectDBPeopleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuSelectDBPeopleActionPerformed
+        // TODO add your handling code here:
+        ControllerSelectDB.actionPerformed(evt, LoadImagesPNM.PEOPLE);
+    }//GEN-LAST:event_menuSelectDBPeopleActionPerformed
+
+    private void menuProcessNormalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuProcessNormalActionPerformed
+        // TODO add your handling code here:
+        ControllerProcessNormal.actionPerformed(evt);
+    }//GEN-LAST:event_menuProcessNormalActionPerformed
+
+    private void menuSaveMediaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuSaveMediaActionPerformed
+        // TODO add your handling code here:
+        ControllerSaveMedia.actionPerformed(evt);
+    }//GEN-LAST:event_menuSaveMediaActionPerformed
+
+    private void menuSaveNormalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuSaveNormalActionPerformed
+        // TODO add your handling code here:
+        ControllerSaveNormal.actionPerformed(evt);
+    }//GEN-LAST:event_menuSaveNormalActionPerformed
+
+    private void menuSaveLogActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuSaveLogActionPerformed
+        // TODO add your handling code here:
+        ControllerSaveLog.actionPerformed(evt);
+    }//GEN-LAST:event_menuSaveLogActionPerformed
+
+    private void menuProcessRunActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuProcessRunActionPerformed
+        // TODO add your handling code here:
+        ControllerProcessRun.actionPerformed(evt);
+    }//GEN-LAST:event_menuProcessRunActionPerformed
 
     /**
      * @param args the command line arguments
@@ -345,36 +422,38 @@ public class FalconSVD extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private java.awt.Canvas canvas3;
     public static java.awt.Canvas canvasMedia;
+    public static java.awt.Canvas canvasNormal;
     public static java.awt.Canvas canvasTarget;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenu jMenu5;
+    private javax.swing.JMenu jMenu6;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem10;
     private javax.swing.JMenuItem jMenuItem3;
-    private javax.swing.JMenuItem jMenuItem6;
-    private javax.swing.JMenuItem jMenuItem7;
-    private javax.swing.JMenuItem jMenuItem8;
     private javax.swing.JMenuItem jMenuItem9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
-    private javax.swing.JPanel jPanel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JMenuItem menuOpenTarget;
     public static javax.swing.JMenuItem menuProcessMedia;
     public static javax.swing.JMenuItem menuProcessNormal;
     public static javax.swing.JMenuItem menuProcessRun;
-    public static javax.swing.JMenuItem menuSelectDB;
+    public static javax.swing.JMenuItem menuSaveLog;
+    public static javax.swing.JMenuItem menuSaveMedia;
+    public static javax.swing.JMenuItem menuSaveNormal;
+    public static javax.swing.JMenuItem menuSelectDBPeople;
+    public static javax.swing.JMenuItem menuSelectDBSomebody;
     public static javax.swing.JMenuItem menuThreshold;
     public static javax.swing.JPanel panelDrawMedia;
+    public static javax.swing.JPanel panelDrawNormal;
     public static javax.swing.JPanel panelDrawTarget;
     public static javax.swing.JProgressBar progressBar;
     public static javax.swing.JTabbedPane tabbedPanel;

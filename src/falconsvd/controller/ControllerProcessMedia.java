@@ -36,6 +36,8 @@ public class ControllerProcessMedia {
         FalconSVD.panelDrawMedia.add(canvasPNM, BorderLayout.CENTER);
         canvasPNM.repaint();
         registerProgress(100, "Se pinta la imagen sobre el canvas Media");
+        FalconSVD.menuProcessNormal.setEnabled(true);
+        FalconSVD.menuSaveMedia.setEnabled(true);
     }
     
     /**
