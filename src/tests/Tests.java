@@ -157,9 +157,94 @@ public class Tests {
     }
     
     
+    
+    public static void pruebaReconocimiento() {
+        int rows = 15;
+        int colums = 4;
+        int numImagenes = 5;
+        int numPixeles = rows * colums;
+        // imagenes
+        Matrix[] imagenes = new Matrix[numImagenes];
+        for (int i = 0; i < imagenes.length; i++) {
+            imagenes[i] = Matrix.random(rows, colums);
+        }
+        // base de datos de imagenes
+        Matrix matrixDB = new Matrix(numPixeles, numImagenes);
+        for (int j = 0; j < numImagenes; j++) {
+            double[] pixeles = imagenes[j].getColumnPackedCopy();
+            Matrix vectorPixeles = new Matrix(pixeles, numPixeles);
+            matrixDB.setMatrix(0, numPixeles-1, j, j, vectorPixeles);
+        }
+        // media de la base de datos
+        Matrix matrixMedia = new Matrix(numPixeles, 1);
+        for (int i = 0; i < matrixDB.getRowDimension(); i++) {
+            Matrix row = matrixDB.getMatrix(i, i, 0, numImagenes-1);
+            matrixMedia.set(i, 0, getMedia(row));
+        }
+        // matrix target
+        Matrix matrixTarget1 = matrixDB.getMatrix(0, numPixeles-1, 3, 3);
+        Matrix matrixTarget2 = Matrix.random(rows, colums);
+        double[] pixeles = matrixTarget2.getColumnPackedCopy();
+        matrixTarget2 = new Matrix(pixeles, numPixeles);
+        
+        // --- ver datos
+        System.out.println("\n-----> Matrix BD");
+        imprimirMatrix(matrixDB);
+        System.out.println("\n-----> Matrix Media");
+        imprimirMatrix(matrixMedia);
+        System.out.println("\n-----> Matrix Target1");
+        imprimirMatrix(matrixTarget1);
+        System.out.println("\n-----> Matrix Target2");
+        imprimirMatrix(matrixTarget2);
+        
+        // Reconocimiento Target1
+        Reconocimiento reconocimiento = new Reconocimiento(matrixMedia);
+        reconocimiento.runSVD();
+        Matrix U = reconocimiento.getMatrixU();
+        Matrix S = reconocimiento.getMatrixS();
+        Matrix V = reconocimiento.getMatrixV();
+        Matrix matrixCaracteristica = reconocimiento.getMatrixCaracteristica();
+        
+        // ver datos
+        System.out.println("\n-----> Matrix U");
+        imprimirMatrix(U);
+        System.out.println("\n-----> Matrix S");
+        imprimirMatrix(S);
+        System.out.println("\n-----> Matrix V");
+        imprimirMatrix(V);
+        System.out.println("\n-----> Matrix Caracteristica");
+        imprimirMatrix(matrixCaracteristica);
+        
+        
+        boolean reconoce = false;
+        
+        System.out.println("\nReconoce Target1 ?");
+        reconoce = reconocimiento.findImage(matrixTarget1, 1.0, Reconocimiento.NORMA2);
+        System.out.println("\nReconoce? "+reconoce);
+        System.out.println("Range "+reconocimiento.getRange());
+        
+        System.out.println("\nReconoce Target2 ?");
+        reconoce = reconocimiento.findImage(matrixTarget2, 1.0, Reconocimiento.NORMA2);
+        System.out.println("\nReconoce? "+reconoce);
+        System.out.println("Range "+reconocimiento.getRange());
+        
+    }
+    
+    
+    private static double getMedia(Matrix row) {
+        double media = 0;
+        for (int i = 0; i < row.getColumnDimension(); i++) {
+            media += row.get(0, i);
+        }
+        media /= row.getColumnDimension();
+        return media;
+    }
+    
+    
     public static void main(String[] args) {
         System.out.println("--> Prueba SVD");
-        pruebaSVD();
+        //pruebaSVD();
         //pruebaMatrixDB();
+        pruebaReconocimiento();
     }
 }

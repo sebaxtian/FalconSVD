@@ -48,10 +48,12 @@ public class FalconSVD {
         this.matrixMedia = matrixMedia;
         this.threshold = threshold;
         // ---------------
+        /*
         Matrix matrixTargetColum = new Matrix(matrixTarget.getColumnPackedCopy(), 10304);
         Matrix matrixMediaColum = new Matrix(matrixMedia.getColumnPackedCopy(), 10304);
         this.matrixTarget = matrixTargetColum;
         this.matrixMedia = matrixMediaColum;
+        */
     }
     
     
@@ -61,15 +63,23 @@ public class FalconSVD {
      */
     public void runSVD() {
         SingularValueDecomposition SVD = matrixMedia.svd();
-        S = SVD.getS();
-        V = SVD.getV().transpose();
-        U = SVD.getU();
         
-        System.out.println("S : filas = "+S.getRowDimension()+" columnas = "+S.getColumnDimension());
-        System.out.println("V : filas = "+V.getRowDimension()+" columnas = "+V.getColumnDimension());
-        System.out.println("U : filas = "+U.getRowDimension()+" columnas = "+U.getColumnDimension());
+        U = SVD.getU(); // Vectores Singulares De La Izquierda
+        S = SVD.getS(); // Matrix De Valores Singulares
+        V = SVD.getV(); // Vectores Singulares De La Derecha
+        V = V.transpose();
+        
+        
         System.out.println("matrixMedia : filas = "+matrixMedia.getRowDimension()+" columnas = "+matrixMedia.getColumnDimension());
-        System.out.println("imageTarget : filas = "+matrixTarget.getRowDimension()+" columnas = "+matrixTarget.getColumnDimension());
+        //imprimirMatrix(matrixMedia);
+        System.out.println("matrixTarget : filas = "+matrixTarget.getRowDimension()+" columnas = "+matrixTarget.getColumnDimension());
+        //imprimirMatrix(matrixTarget);
+        System.out.println("U : filas = "+U.getRowDimension()+" columnas = "+U.getColumnDimension());
+        //imprimirMatrix(U);
+        System.out.println("S : filas = "+S.getRowDimension()+" columnas = "+S.getColumnDimension());
+        //imprimirMatrix(S);
+        System.out.println("V : filas = "+V.getRowDimension()+" columnas = "+V.getColumnDimension());
+        //imprimirMatrix(V);
     }
     
     
@@ -84,18 +94,21 @@ public class FalconSVD {
         double range = Double.MAX_VALUE;
         Matrix matrixProducto = matrixMedia.times(V);
         System.out.println("matrixProducto : filas = "+matrixProducto.getRowDimension()+" columnas = "+matrixProducto.getColumnDimension());
-        Matrix diferencia = matrixTarget.minus(matrixProducto);
+        //imprimirMatrix(matrixProducto);
+        Matrix matrixDiferencia = matrixTarget.minus(matrixProducto);
+        System.out.println("matrixDiferencia : filas = "+matrixDiferencia.getRowDimension()+" columnas = "+matrixDiferencia.getColumnDimension());
+        //imprimirMatrix(matrixDiferencia);
         if(norma == NORMA1) {
-            range = diferencia.norm1();
+            range = matrixDiferencia.norm1();
         }
         if(norma == NORMA2) {
-            range = diferencia.norm2();
+            range = matrixDiferencia.norm2();
         }
         if(norma == NORMAFrob) {
-            range = diferencia.normF();
+            range = matrixDiferencia.normF();
         }
         if(norma == NORMAInf) {
-            range = diferencia.normInf();
+            range = matrixDiferencia.normInf();
         }
         System.out.println("Range "+range);
         return range;
@@ -115,6 +128,16 @@ public class FalconSVD {
             match = true;
         }
         return match;
+    }
+    
+    
+    private void imprimirMatrix(Matrix matrix) {
+        for (int i = 0; i < matrix.getRowDimension(); i++) {
+            for (int j = 0; j < matrix.getColumnDimension(); j++) {
+                System.out.print(matrix.get(i, j)+" \t ");
+            }
+            System.out.println("");
+        }
     }
     
 }

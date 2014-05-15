@@ -22,7 +22,7 @@ import javax.swing.JOptionPane;
 
 public class ControllerEditThreshold {
     
-    public static double threshold;
+    public static double threshold = 0.5;
     
     public static void actionPerformed(ActionEvent e) {
         String inputValue = JOptionPane.showInputDialog(FalconSVD.tabbedPanel, "Input The Threshold Value", "Edit Threshold", JOptionPane.QUESTION_MESSAGE);
