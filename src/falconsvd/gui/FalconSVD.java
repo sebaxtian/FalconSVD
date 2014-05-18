@@ -7,10 +7,12 @@
 package falconsvd.gui;
 
 import falconsvd.controller.ControllerEditThreshold;
+import falconsvd.controller.ControllerFalconDetection;
+import falconsvd.controller.ControllerFalconMake;
+import falconsvd.controller.ControllerFalconRecognition;
 import falconsvd.controller.ControllerOpenTarget;
 import falconsvd.controller.ControllerProcessMedia;
 import falconsvd.controller.ControllerProcessNormal;
-import falconsvd.controller.ControllerProcessRun;
 import falconsvd.controller.ControllerSaveLog;
 import falconsvd.controller.ControllerSaveMedia;
 import falconsvd.controller.ControllerSaveNormal;
@@ -51,6 +53,10 @@ public class FalconSVD extends javax.swing.JFrame {
         panelDrawNormal = new javax.swing.JPanel();
         canvasNormal = new java.awt.Canvas();
         jPanel4 = new javax.swing.JPanel();
+        panelDrawMatch = new javax.swing.JPanel();
+        canvasMatch = new java.awt.Canvas();
+        panelDrawMatchDB = new javax.swing.JPanel();
+        canvasMatchDB = new java.awt.Canvas();
         jPanel5 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         textAreaLog = new javax.swing.JTextArea();
@@ -68,7 +74,10 @@ public class FalconSVD extends javax.swing.JFrame {
         jMenu3 = new javax.swing.JMenu();
         menuProcessMedia = new javax.swing.JMenuItem();
         menuProcessNormal = new javax.swing.JMenuItem();
-        menuProcessRun = new javax.swing.JMenuItem();
+        jMenu7 = new javax.swing.JMenu();
+        menuFalconMake = new javax.swing.JMenuItem();
+        menuFalconDetection = new javax.swing.JMenuItem();
+        menuFalconRecognition = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
         menuSaveMedia = new javax.swing.JMenuItem();
         menuSaveNormal = new javax.swing.JMenuItem();
@@ -79,8 +88,8 @@ public class FalconSVD extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("FalconSVD");
-        setMinimumSize(new java.awt.Dimension(512, 450));
-        setPreferredSize(new java.awt.Dimension(512, 450));
+        setMinimumSize(new java.awt.Dimension(520, 450));
+        setPreferredSize(new java.awt.Dimension(520, 450));
 
         panelDrawTarget.setBackground(new java.awt.Color(254, 254, 254));
         panelDrawTarget.setPreferredSize(new java.awt.Dimension(240, 320));
@@ -92,16 +101,16 @@ public class FalconSVD extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(135, Short.MAX_VALUE)
+                .addContainerGap(140, Short.MAX_VALUE)
                 .addComponent(panelDrawTarget, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(136, Short.MAX_VALUE))
+                .addContainerGap(140, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(panelDrawTarget, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(63, Short.MAX_VALUE))
+                .addContainerGap(15, Short.MAX_VALUE))
         );
 
         tabbedPanel.addTab("Target", jPanel1);
@@ -116,16 +125,16 @@ public class FalconSVD extends javax.swing.JFrame {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(140, Short.MAX_VALUE)
                 .addComponent(panelDrawMedia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(140, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(panelDrawMedia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(15, Short.MAX_VALUE))
         );
 
         tabbedPanel.addTab("Media", jPanel2);
@@ -140,32 +149,52 @@ public class FalconSVD extends javax.swing.JFrame {
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(140, Short.MAX_VALUE)
                 .addComponent(panelDrawNormal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(140, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(panelDrawNormal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(15, Short.MAX_VALUE))
         );
 
         tabbedPanel.addTab("Normal", jPanel3);
+
+        panelDrawMatch.setBackground(new java.awt.Color(254, 254, 254));
+        panelDrawMatch.setPreferredSize(new java.awt.Dimension(240, 320));
+        panelDrawMatch.setLayout(new java.awt.BorderLayout());
+        panelDrawMatch.add(canvasMatch, java.awt.BorderLayout.CENTER);
+
+        panelDrawMatchDB.setBackground(new java.awt.Color(254, 254, 254));
+        panelDrawMatchDB.setPreferredSize(new java.awt.Dimension(240, 320));
+        panelDrawMatchDB.setLayout(new java.awt.BorderLayout());
+        panelDrawMatchDB.add(canvasMatchDB, java.awt.BorderLayout.CENTER);
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 511, Short.MAX_VALUE)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap(17, Short.MAX_VALUE)
+                .addComponent(panelDrawMatch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(panelDrawMatchDB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(17, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 394, Short.MAX_VALUE)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(panelDrawMatchDB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(panelDrawMatch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(15, Short.MAX_VALUE))
         );
 
-        tabbedPanel.addTab("Result", jPanel4);
+        tabbedPanel.addTab("Recognition", jPanel4);
 
         textAreaLog.setLineWrap(true);
         jScrollPane1.setViewportView(textAreaLog);
@@ -183,7 +212,7 @@ public class FalconSVD extends javax.swing.JFrame {
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 372, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 323, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -270,15 +299,36 @@ public class FalconSVD extends javax.swing.JFrame {
         });
         jMenu3.add(menuProcessNormal);
 
-        menuProcessRun.setText("Run");
-        menuProcessRun.setToolTipText("run the process");
-        menuProcessRun.setEnabled(false);
-        menuProcessRun.addActionListener(new java.awt.event.ActionListener() {
+        jMenu7.setText("FalconSVD");
+
+        menuFalconMake.setText("Make");
+        menuFalconMake.setEnabled(false);
+        menuFalconMake.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuProcessRunActionPerformed(evt);
+                menuFalconMakeActionPerformed(evt);
             }
         });
-        jMenu3.add(menuProcessRun);
+        jMenu7.add(menuFalconMake);
+
+        menuFalconDetection.setText("Detection");
+        menuFalconDetection.setEnabled(false);
+        menuFalconDetection.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuFalconDetectionActionPerformed(evt);
+            }
+        });
+        jMenu7.add(menuFalconDetection);
+
+        menuFalconRecognition.setText("Recognition");
+        menuFalconRecognition.setEnabled(false);
+        menuFalconRecognition.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuFalconRecognitionActionPerformed(evt);
+            }
+        });
+        jMenu7.add(menuFalconRecognition);
+
+        jMenu3.add(jMenu7);
 
         jMenuBar1.add(jMenu3);
 
@@ -381,10 +431,20 @@ public class FalconSVD extends javax.swing.JFrame {
         ControllerSaveLog.actionPerformed(evt);
     }//GEN-LAST:event_menuSaveLogActionPerformed
 
-    private void menuProcessRunActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuProcessRunActionPerformed
+    private void menuFalconMakeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuFalconMakeActionPerformed
         // TODO add your handling code here:
-        ControllerProcessRun.actionPerformed(evt);
-    }//GEN-LAST:event_menuProcessRunActionPerformed
+        ControllerFalconMake.actionPerformed(evt);
+    }//GEN-LAST:event_menuFalconMakeActionPerformed
+
+    private void menuFalconDetectionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuFalconDetectionActionPerformed
+        // TODO add your handling code here:
+        ControllerFalconDetection.actionPerformed(evt);
+    }//GEN-LAST:event_menuFalconDetectionActionPerformed
+
+    private void menuFalconRecognitionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuFalconRecognitionActionPerformed
+        // TODO add your handling code here:
+        ControllerFalconRecognition.actionPerformed(evt);
+    }//GEN-LAST:event_menuFalconRecognitionActionPerformed
 
     /**
      * @param args the command line arguments
@@ -422,6 +482,8 @@ public class FalconSVD extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    public static java.awt.Canvas canvasMatch;
+    public static java.awt.Canvas canvasMatchDB;
     public static java.awt.Canvas canvasMedia;
     public static java.awt.Canvas canvasNormal;
     public static java.awt.Canvas canvasTarget;
@@ -431,6 +493,7 @@ public class FalconSVD extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenu jMenu5;
     private javax.swing.JMenu jMenu6;
+    private javax.swing.JMenu jMenu7;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem10;
     private javax.swing.JMenuItem jMenuItem3;
@@ -442,16 +505,20 @@ public class FalconSVD extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPopupMenu.Separator jSeparator1;
+    public static javax.swing.JMenuItem menuFalconDetection;
+    public static javax.swing.JMenuItem menuFalconMake;
+    public static javax.swing.JMenuItem menuFalconRecognition;
     private javax.swing.JMenuItem menuOpenTarget;
     public static javax.swing.JMenuItem menuProcessMedia;
     public static javax.swing.JMenuItem menuProcessNormal;
-    public static javax.swing.JMenuItem menuProcessRun;
     public static javax.swing.JMenuItem menuSaveLog;
     public static javax.swing.JMenuItem menuSaveMedia;
     public static javax.swing.JMenuItem menuSaveNormal;
     public static javax.swing.JMenuItem menuSelectDBPeople;
     public static javax.swing.JMenuItem menuSelectDBSomebody;
     public static javax.swing.JMenuItem menuThreshold;
+    public static javax.swing.JPanel panelDrawMatch;
+    public static javax.swing.JPanel panelDrawMatchDB;
     public static javax.swing.JPanel panelDrawMedia;
     public static javax.swing.JPanel panelDrawNormal;
     public static javax.swing.JPanel panelDrawTarget;

@@ -6,6 +6,7 @@
 
 package falconsvd.controller;
 
+import Jama.Matrix;
 import falconsvd.gui.FalconSVD;
 import falconsvd.model.CanvasPNM;
 import falconsvd.model.ImagePNM;
@@ -38,6 +39,7 @@ public class ControllerProcessMedia {
         registerProgress(100, "Se pinta la imagen sobre el canvas Media");
         FalconSVD.menuProcessNormal.setEnabled(true);
         FalconSVD.menuSaveMedia.setEnabled(true);
+        canvasPNM = null;
     }
     
     /**

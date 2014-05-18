@@ -28,7 +28,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class ControllerOpenTarget {
 
-    public static FilePNM filePNMTarget;
+    //public static FilePNM filePNMTarget;
     public static ImagePNM imageTarget;
     
     public static void actionPerformed(ActionEvent e) {
@@ -39,7 +39,7 @@ public class ControllerOpenTarget {
         if(selection == JFileChooser.APPROVE_OPTION) {
             File file = fileChooser.getSelectedFile();
             registerProgress(25, "Archivo de imagen seleccionado "+file.getName());
-            filePNMTarget = new FilePNM(file.getAbsolutePath());
+            FilePNM filePNMTarget = new FilePNM(file.getAbsolutePath());
             filePNMTarget.openFile();
             registerProgress(60, "Se ha leido con exito el archivo de imagen");
             // draw image on Panel
@@ -52,6 +52,9 @@ public class ControllerOpenTarget {
             FalconSVD.menuSelectDBSomebody.setEnabled(true);
             FalconSVD.menuSelectDBPeople.setEnabled(true);
             FalconSVD.menuSaveLog.setEnabled(true);
+            file = null;
+            filePNMTarget = null;
+            canvasPNM = null;
         }
     }
     

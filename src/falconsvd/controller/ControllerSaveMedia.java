@@ -38,6 +38,8 @@ public class ControllerSaveMedia {
             registerProgress(50, "Se inicia la configuracion y escritura del archivo");
             filePNM.saveFile();
             registerProgress(100, "El archivo de imagen media se ha guardado con exito");
+            file = null;
+            filePNM = null;
         }
     }
     

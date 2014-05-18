@@ -62,7 +62,7 @@ public class CanvasPNM extends Canvas {
             Graphics gbuff = bufferImage.getGraphics();
             for (int i = 0; i < rows; i++) {
                 for (int j = 0; j < colums; j++) {
-                    int value = (int)matrix.get(i, j);
+                    int value = Math.abs((int)matrix.get(i, j));
                     gbuff.setColor(new Color(value, value, value));
                     gbuff.fillOval(j, i, 2, 2);
                 }

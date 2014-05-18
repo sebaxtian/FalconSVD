@@ -50,10 +50,16 @@ public class ControllerSelectDB {
                 dbImages.buildDBImages();
                 registerProgress(100, "La martix DB de imagenes ha sido construida con exito");
                 FalconSVD.menuProcessMedia.setEnabled(true);
+                FalconSVD.menuFalconMake.setEnabled(false);
+                FalconSVD.menuFalconDetection.setEnabled(false);
+                FalconSVD.menuFalconRecognition.setEnabled(false);
             } else {
                 registerProgress(80, "El directorio DB no contiene imagenes");
                 registerProgress(100, "La martix DB de imagenes no ha sido construida");
             }
+            dirDBImages = null;
+            loadImagesPNM = null;
+            pnmImages = null;
         }
     }
     

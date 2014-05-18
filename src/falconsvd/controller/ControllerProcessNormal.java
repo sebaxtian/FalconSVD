@@ -6,7 +6,6 @@
 
 package falconsvd.controller;
 
-import static falconsvd.controller.ControllerProcessMedia.imageMedia;
 import falconsvd.gui.FalconSVD;
 import falconsvd.model.CanvasPNM;
 import falconsvd.model.ImagePNM;
@@ -39,7 +38,9 @@ public class ControllerProcessNormal {
         canvasPNM.repaint();
         registerProgress(100, "Se pinta la imagen sobre el canvas Normal");
         FalconSVD.menuSaveNormal.setEnabled(true);
-        FalconSVD.menuProcessRun.setEnabled(true);
+        FalconSVD.menuFalconMake.setEnabled(true);
+        normalImage = null;
+        canvasPNM = null;
     }
     
     /**

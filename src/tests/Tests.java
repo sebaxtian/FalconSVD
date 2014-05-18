@@ -10,6 +10,7 @@ import Jama.EigenvalueDecomposition;
 import Jama.Matrix;
 import falconsvd.model.FilePNM;
 import falconsvd.model.ImagePNM;
+import java.text.NumberFormat;
 
 /**
  * Clase que contiene metodo Main para ejecutar pruebas.
@@ -94,10 +95,13 @@ public class Tests {
         System.out.println("colums "+colums);
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < colums; j++) {
-                System.out.print("\t"+X.get(i, j));
+                NumberFormat nf = NumberFormat.getInstance();
+                nf.setMaximumFractionDigits(2);
+                System.out.print("\t"+nf.format(X.get(i, j)));
             }
             System.out.println("");
         }
+        System.out.println("");
     }
     
     public static void pruebaMatrixDB() {
@@ -241,10 +245,141 @@ public class Tests {
     }
     
     
+    
+    public static void pruebaFaceDetection() {
+        int rows = 12;
+        int colums = 4;
+        int numImagenes = 5;
+        int numPixeles = rows * colums;
+        // imagenes
+        Matrix[] imagenes = new Matrix[numImagenes];
+        for (int i = 0; i < imagenes.length; i++) {
+            imagenes[i] = Matrix.random(rows, colums);
+        }
+        
+        
+        
+        // base de datos de imagenes
+        Matrix matrixDB = new Matrix(numPixeles, numImagenes);
+        for (int j = 0; j < numImagenes; j++) {
+            double[] pixeles = imagenes[j].getColumnPackedCopy();
+            Matrix vectorPixeles = new Matrix(pixeles, numPixeles);
+            matrixDB.setMatrix(0, numPixeles-1, j, j, vectorPixeles);
+        }
+        
+        
+        // matrix target
+        Matrix matrixTarget1 = matrixDB.getMatrix(0, numPixeles-1, 2, 2);
+        Matrix matrixTarget2 = Matrix.random(rows, colums);
+        double[] pixeles = matrixTarget2.getColumnPackedCopy();
+        matrixTarget2 = new Matrix(pixeles, numPixeles);
+        
+        
+        // umbral
+        double threshold = 0.8;
+        
+        
+        // FaceDetection
+        FaceDetection faceDetection = new FaceDetection(matrixDB);
+        // Matrix que coincide en la deteccion
+        Matrix matrixMatch;
+        
+        // imprimir datos
+        System.out.println("----->> Matrix matrixDB");
+        imprimirMatrix(matrixDB);
+        
+        System.out.println("----->> Matrix matrixTarget1");
+        imprimirMatrix(matrixTarget1);
+        
+        System.out.println("----->> Matrix matrixMedia");
+        imprimirMatrix(faceDetection.getMatrixMedia());
+        
+        System.out.println("----->> Matrix matrixTraining");
+        imprimirMatrix(faceDetection.getMatrixTraining());
+        
+        System.out.println("----->> Matrix matrixCovariance");
+        imprimirMatrix(faceDetection.getMatrixCovariance());
+        
+        System.out.println("----->> Matrix matrixU");
+        imprimirMatrix(faceDetection.getMatrixU());
+        
+        System.out.println("----->> Matrix matrixS");
+        imprimirMatrix(faceDetection.getMatrixS());
+        
+        System.out.println("----->> Matrix matrixV");
+        imprimirMatrix(faceDetection.getMatrixV());
+        
+        
+        
+        // crea los datos de deteccion para Norma 1 target 1 kFaces = rango
+        faceDetection.makeDetection(faceDetection.getMatrixTraining().rank(), FaceDetection.NORMA1, matrixTarget1);
+        System.out.println("----->> Norma 1");
+        System.out.println("----->> Distance");
+        System.out.println(""+faceDetection.getDistance());
+        System.out.println("----->> Threshold");
+        System.out.println(""+threshold);
+        faceDetection.makeRecognition(faceDetection.getMatrixTraining().rank(), FaceDetection.NORMA1, matrixTarget1);
+        System.out.println("----->> Matrix matrixMatch");
+        imprimirMatrix(faceDetection.getMatrixMatch());
+        System.out.println("indexMatrixMatch "+faceDetection.getIndexMatrixMatch());
+        
+        // crea los datos de deteccion para Norma 2 target 1 kFaces = rango
+        faceDetection.makeDetection(faceDetection.getMatrixTraining().rank(), FaceDetection.NORMA2, matrixTarget1);
+        System.out.println("----->> Norma 2");
+        System.out.println("----->> Distance");
+        System.out.println(""+faceDetection.getDistance());
+        System.out.println("----->> Threshold");
+        System.out.println(""+threshold);
+        faceDetection.makeRecognition(faceDetection.getMatrixTraining().rank(), FaceDetection.NORMA2, matrixTarget1);
+        System.out.println("----->> Matrix matrixMatch");
+        imprimirMatrix(faceDetection.getMatrixMatch());
+        System.out.println("indexMatrixMatch "+faceDetection.getIndexMatrixMatch());
+        
+        
+        
+        // crea los datos de deteccion para Norma 1 target 2 kFaces = rango
+        faceDetection.makeDetection(faceDetection.getMatrixTraining().rank(), FaceDetection.NORMA1, matrixTarget2);
+        System.out.println("----->> Norma 1");
+        System.out.println("----->> Distance");
+        System.out.println(""+faceDetection.getDistance());
+        System.out.println("----->> Threshold");
+        System.out.println(""+threshold);
+        faceDetection.makeRecognition(faceDetection.getMatrixTraining().rank(), FaceDetection.NORMA1, matrixTarget2);
+        System.out.println("----->> Matrix matrixMatch");
+        imprimirMatrix(faceDetection.getMatrixMatch());
+        System.out.println("indexMatrixMatch "+faceDetection.getIndexMatrixMatch());
+        
+        // crea los datos de deteccion para Norma 2 target 2 kFaces = rango
+        faceDetection.makeDetection(faceDetection.getMatrixTraining().rank(), FaceDetection.NORMA2, matrixTarget2);
+        System.out.println("----->> Norma 2");
+        System.out.println("----->> Distance");
+        System.out.println(""+faceDetection.getDistance());
+        System.out.println("----->> Threshold");
+        System.out.println(""+threshold);
+        faceDetection.makeRecognition(faceDetection.getMatrixTraining().rank(), FaceDetection.NORMA2, matrixTarget2);
+        System.out.println("----->> Matrix matrixMatch");
+        imprimirMatrix(faceDetection.getMatrixMatch());
+        System.out.println("indexMatrixMatch "+faceDetection.getIndexMatrixMatch());
+    }
+    
+    
+    
     public static void main(String[] args) {
         System.out.println("--> Prueba SVD");
         //pruebaSVD();
         //pruebaMatrixDB();
-        pruebaReconocimiento();
+        //pruebaReconocimiento();
+        
+        /*
+        Matrix vector = Matrix.random(5, 1);
+        Matrix producto = vector.times(vector.transpose());
+        imprimirMatrix(vector);
+        imprimirMatrix(vector.transpose());
+        imprimirMatrix(producto);
+        producto = vector.transpose().times(vector);
+        imprimirMatrix(producto);
+        */
+        
+        pruebaFaceDetection();
     }
 }

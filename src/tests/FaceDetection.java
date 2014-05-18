@@ -4,27 +4,20 @@
  * and open the template in the editor.
  */
 
-package falconsvd.model;
+package tests;
 
 import Jama.Matrix;
 import Jama.SingularValueDecomposition;
 
-
 /**
- * Esta clase contiene el algoritmo a utilizar para la identificacion
- * de una imagen en un conjunto de imagenes mediante la descomposicion
- * de valores singulares - SVD y el calculo de Eigenfaces.
- * 
+ * Algoritmo FaceDetection.
+ * http://www.scholarpedia.org/article/Eigenfaces
  * @author sebaxtian
- * @version 1.0
  */
 
 
-public class FalconSVD {
+public class FaceDetection {
     
-    /**
-     * Atributos de clase.
-     */
     public static int NORMA1 = 1;
     public static int NORMA2 = 2;
     public static int NORMAFrob = 3;
@@ -47,27 +40,23 @@ public class FalconSVD {
     /**
      * Metodo constructor de clase.
      * @param matrixDB
-     * @param matrixMedia
      */
-    public FalconSVD(Matrix matrixDB, Matrix matrixMedia) {
+    public FaceDetection(Matrix matrixDB) {
         this.matrixDB = matrixDB;
-        this.matrixMedia = matrixMedia;
-        System.out.println("Inicia Make");
         make();
-        System.out.println("Termina Make");
     }
     
     
     /**
      * Construye la matrix de la cara promedio.
      */
-//    private void makeMatrixMedia() {
-//        matrixMedia = new Matrix(matrixDB.getRowDimension(), 1);
-//        for (int i = 0; i < matrixDB.getRowDimension(); i++) {
-//            Matrix rowPixels = matrixDB.getMatrix(i, i, 0, matrixDB.getColumnDimension()-1);
-//            matrixMedia.set(i, 0, getMedia(rowPixels));
-//        }
-//    }
+    private void makeMatrixMedia() {
+        matrixMedia = new Matrix(matrixDB.getRowDimension(), 1);
+        for (int i = 0; i < matrixDB.getRowDimension(); i++) {
+            Matrix rowPixels = matrixDB.getMatrix(i, i, 0, matrixDB.getColumnDimension()-1);
+            matrixMedia.set(i, 0, getMedia(rowPixels));
+        }
+    }
     
     
     /**
@@ -75,14 +64,14 @@ public class FalconSVD {
      * @param vector
      * @return media
      */
-//    private double getMedia(Matrix vector) {
-//        double media = 0;
-//        for (int j = 0; j < vector.getColumnDimension(); j++) {
-//            media += vector.get(0, j);
-//        }
-//        media = media / vector.getColumnDimension();
-//        return media;
-//    }
+    private double getMedia(Matrix vector) {
+        double media = 0;
+        for (int j = 0; j < vector.getColumnDimension(); j++) {
+            media += vector.get(0, j);
+        }
+        media = media / vector.getColumnDimension();
+        return media;
+    }
     
     
     /**
@@ -94,10 +83,7 @@ public class FalconSVD {
             Matrix imageDB = matrixDB.getMatrix(0, matrixDB.getRowDimension()-1, j, j);
             Matrix normalColum = imageDB.minus(matrixMedia);
             matrixTraining.setMatrix(0, matrixTraining.getRowDimension()-1, j, j, normalColum);
-            imageDB = null;
-            normalColum = null;
         }
-        launchGarbarge();
     }
     
     
@@ -106,7 +92,6 @@ public class FalconSVD {
      */
     private void makeMatrixCovarianza() {
         matrixCovariance = matrixTraining.times(matrixTraining.transpose());
-        launchGarbarge();
     }
     
     
@@ -118,7 +103,6 @@ public class FalconSVD {
         matrixU = SVD.getU();
         matrixS = SVD.getS();
         matrixV = SVD.getV();
-        launchGarbarge();
     }
     
     
@@ -132,9 +116,7 @@ public class FalconSVD {
         for (int j = 0; j < m; j++) {
             Matrix colum = matrixU.getMatrix(0, matrixU.getRowDimension()-1, j, j);
             matrixUPrima.setMatrix(0, matrixUPrima.getRowDimension()-1, j, j, colum);
-            colum = null;
         }
-        launchGarbarge();
     }
     
     
@@ -171,7 +153,6 @@ public class FalconSVD {
                 k = j;
             }
         }
-        System.out.println("minDistancia "+minDistancia);
         matrixMatch = matrixTraining.getMatrix(0, matrixTraining.getRowDimension()-1, k, k);
         indexMatrixMatch = k;
     }
@@ -220,11 +201,11 @@ public class FalconSVD {
      */
     private void make() {
         // Paso 1
-        //makeMatrixMedia();
+        makeMatrixMedia();
         // Paso 2
         makeMatrixTraining();
         // Paso 3 (necesario ?)
-        //makeMatrixCovarianza();
+        makeMatrixCovarianza();
         // Paso 4
         makeMatrixSVD();
     }
@@ -315,12 +296,6 @@ public class FalconSVD {
     
     public int getIndexMatrixMatch() {
         return indexMatrixMatch;
-    }
-    
-    
-    private void launchGarbarge() {
-        System.gc();
-        Runtime.getRuntime().gc();
     }
     
 }

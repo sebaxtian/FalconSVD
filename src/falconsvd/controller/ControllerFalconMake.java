@@ -8,12 +8,11 @@ package falconsvd.controller;
 
 import Jama.Matrix;
 import falconsvd.model.FalconSVD;
-import falconsvd.model.ImagePNM;
 import java.awt.event.ActionEvent;
 
 /**
  * Esta es una clase controladora de eventos para el
- * elemento de menu 'Process -> Run' de la clase JFrame
+ * elemento de menu 'Process -> FalconSVD -> Make' de la clase JFrame
  * falconsvd.gui.FalconSVD.
  * 
  * @author sebaxtian
@@ -21,20 +20,25 @@ import java.awt.event.ActionEvent;
  */
 
 
-public class ControllerProcessRun {
+public class ControllerFalconMake {
     
-    public static ImagePNM imageMatch;
+    public static FalconSVD falconSVD;
     
     public static void actionPerformed(ActionEvent e) {
-        Matrix matrixTarget = ControllerOpenTarget.imageTarget.getMatrix();
         Matrix matrixDB = ControllerSelectDB.dbImages.getMatrixDBImages();
-        double threshold = ControllerEditThreshold.threshold;
-        
+        Matrix matrixMedia = ControllerSelectDB.dbImages.getMatrixMediaImages();
+        registerProgress(50, "Se obtiene con exito la matrix media de la DB de imagenes");
+        falconSVD = new FalconSVD(matrixDB, matrixMedia);
+        registerProgress(100, "Se crea con exito el objeto de reconocimiento FalconSVD");
+        falconsvd.gui.FalconSVD.menuFalconDetection.setEnabled(true);
+        falconsvd.gui.FalconSVD.menuFalconRecognition.setEnabled(true);
+        matrixDB = null;
+        matrixMedia = null;
     }
     
     /**
-     * Metodo que registra en el area de log el progreso de la ejecucion
-     * del reconocimiento de rostros mediante SVD y Eigenfaces.
+     * Metodo que registra en el area de log el progreso de la creacion
+     * del objeto de reconocimiento de rostros mediante SVD y Eigenfaces.
      * 
      * @param progress
      * @param message 
@@ -45,7 +49,7 @@ public class ControllerProcessRun {
             public void run() {
                 try {
                     Thread.sleep(300);
-                    falconsvd.gui.FalconSVD.textAreaLog.append("ProcessRun::FalconSVD [OK]\t "+message+"\n");
+                    falconsvd.gui.FalconSVD.textAreaLog.append("FalconMake::FalconSVD [OK]\t "+message+"\n");
                     falconsvd.gui.FalconSVD.progressBar.setValue(progress);
                     falconsvd.gui.FalconSVD.progressBar.setString(progress+"%");
                     if(progress == 100) {
@@ -54,7 +58,7 @@ public class ControllerProcessRun {
                         falconsvd.gui.FalconSVD.progressBar.setString(0+"%");
                     }
                 } catch (InterruptedException ex) {
-                    falconsvd.gui.FalconSVD.textAreaLog.append("ProcessRun::FalconSVD [ERROR]\t Error al dormir hilo");
+                    falconsvd.gui.FalconSVD.textAreaLog.append("FalconMake::FalconSVD [ERROR]\t Error al dormir hilo");
                 }
             }
         };

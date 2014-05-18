@@ -22,7 +22,7 @@ public class ReconoceRostro {
     private Matrix matrixCovariance; // multiplicando el conjunto de imagenes de entrenamiento normalizada por su transpuesta
     private Matrix matrixEigenfaces; // es el producto entre la matrix de entrenamiento normalizada por cada columna de la matrix U
     private Matrix matrixNormalTrainingPrima; // conjunto de imagenes de entrenamiento expresada como una combinacion lineal de Eigenvectors
-    private Matrix vectorClases; // vector de clases calculado como el producto de eigenvectors y cada columna del conjunto de entrenamiento normalizada
+    private Matrix matrixClases; // matrix de clases calculado como el producto de eigenvectors y cada columna del conjunto de entrenamiento normalizada
     private Matrix U, S, V; // valores de descomposicion SVD
     private int numPixels;
     private int numImages;
@@ -116,7 +116,7 @@ public class ReconoceRostro {
     
     
     public void makeVectorClases() {
-        vectorClases = new Matrix(numImages, 1);
+        matrixClases = new Matrix(numImages, 1);
         
     }
     

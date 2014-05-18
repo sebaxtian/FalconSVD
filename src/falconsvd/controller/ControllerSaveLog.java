@@ -38,6 +38,7 @@ public class ControllerSaveLog {
             registerProgress(50, "Se inicia la configuracion y escritura del archivo");
             saveFile(FalconSVD.textAreaLog.getText(), file);
             registerProgress(100, "El archivo de Log se ha guardado con exito");
+            file = null;
         }
     }
     
