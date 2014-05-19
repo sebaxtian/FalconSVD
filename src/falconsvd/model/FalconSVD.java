@@ -97,7 +97,6 @@ public class FalconSVD {
             imageDB = null;
             normalColum = null;
         }
-        launchGarbarge();
     }
     
     
@@ -106,7 +105,6 @@ public class FalconSVD {
      */
     private void makeMatrixCovarianza() {
         matrixCovariance = matrixTraining.times(matrixTraining.transpose());
-        launchGarbarge();
     }
     
     
@@ -118,7 +116,6 @@ public class FalconSVD {
         matrixU = SVD.getU();
         matrixS = SVD.getS();
         matrixV = SVD.getV();
-        launchGarbarge();
     }
     
     
@@ -134,7 +131,6 @@ public class FalconSVD {
             matrixUPrima.setMatrix(0, matrixUPrima.getRowDimension()-1, j, j, colum);
             colum = null;
         }
-        launchGarbarge();
     }
     
     
@@ -315,12 +311,6 @@ public class FalconSVD {
     
     public int getIndexMatrixMatch() {
         return indexMatrixMatch;
-    }
-    
-    
-    private void launchGarbarge() {
-        System.gc();
-        Runtime.getRuntime().gc();
     }
     
 }
