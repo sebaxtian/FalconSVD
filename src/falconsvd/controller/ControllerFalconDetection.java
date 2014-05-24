@@ -26,24 +26,31 @@ public class ControllerFalconDetection {
     public static double distance;
 
     public static void actionPerformed(ActionEvent e) {
-        int kFaces = ControllerFalconMake.falconSVD.getMatrixTraining().rank(); // pueden ser dinamicos
-        int norma = FalconSVD.NORMA2; // pueden ser dinamicos
-        Matrix matrixTarget = ControllerOpenTarget.imageTarget.getReduceMatrix();
-        double[] pixeles = matrixTarget.getColumnPackedCopy();
-        matrixTarget = new Matrix(pixeles, matrixTarget.getRowDimension()*matrixTarget.getColumnDimension());
-        registerProgress(30, "Se obtiene con exito la imagen target");
-        ControllerFalconMake.falconSVD.makeDetection(kFaces, norma, matrixTarget);
-        registerProgress(70, "Se calcula la deteccion de la imagen");
-        distance = ControllerFalconMake.falconSVD.getDistance();
-        registerProgress(80, "Se obtiene el valor de coincidencia de la imagen "+distance);
-        String message;
-        if(distance <= ControllerEditThreshold.threshold) {
-            message = "La Imagen Objetivo Fue Encontrada, Con Un Valor De Coincidencia De: "+distance;
-        } else {
-            message = "La Imagen Objetivo No Fue Encontrada, Con Un Valor De Coincidencia De: "+distance;
-        }
-        JOptionPane.showMessageDialog(falconsvd.gui.FalconSVD.panelDrawTarget, message, "Falcon Detection", JOptionPane.INFORMATION_MESSAGE);
-        registerProgress(100, "La deteccion de la imagen target se ha completado");
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                int kFaces = ControllerFalconMake.falconSVD.getMatrixTraining().rank(); // pueden ser dinamicos
+                int norma = FalconSVD.NORMA2; // pueden ser dinamicos
+                Matrix matrixTarget = ControllerOpenTarget.imageTarget.getReduceMatrix();
+                double[] pixeles = matrixTarget.getColumnPackedCopy();
+                matrixTarget = new Matrix(pixeles, matrixTarget.getRowDimension()*matrixTarget.getColumnDimension());
+                registerProgress(30, "Se obtiene con exito la imagen target");
+                ControllerFalconMake.falconSVD.makeDetection(kFaces, norma, matrixTarget);
+                registerProgress(70, "Se calcula la deteccion de la imagen");
+                distance = ControllerFalconMake.falconSVD.getDistance();
+                registerProgress(80, "Se obtiene el valor de coincidencia de la imagen "+distance);
+                String message;
+                if(distance <= ControllerEditThreshold.threshold) {
+                    message = "La Imagen Objetivo Fue Encontrada, Con Un Valor De Coincidencia De: "+distance;
+                } else {
+                    message = "La Imagen Objetivo No Fue Encontrada, Con Un Valor De Coincidencia De: "+distance;
+                }
+                JOptionPane.showMessageDialog(falconsvd.gui.FalconSVD.panelDrawTarget, message, "Falcon Detection", JOptionPane.INFORMATION_MESSAGE);
+                registerProgress(100, "La deteccion de la imagen target se ha completado");
+            }
+        };
+        Thread hilo = new Thread(runnable);
+        hilo.start();
     }
     
     /**

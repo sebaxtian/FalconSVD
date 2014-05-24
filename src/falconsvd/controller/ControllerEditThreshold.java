@@ -25,15 +25,22 @@ public class ControllerEditThreshold {
     public static double threshold = 0.5;
     
     public static void actionPerformed(ActionEvent e) {
-        String inputValue = JOptionPane.showInputDialog(FalconSVD.tabbedPanel, "Input The Threshold Value", "Edit Threshold", JOptionPane.QUESTION_MESSAGE);
-        try {
-            if(inputValue != null) {
-                threshold = Double.parseDouble(inputValue);
-                registerProgress(100, "Valor de Threshold ha sido editado: "+threshold);
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                String inputValue = JOptionPane.showInputDialog(FalconSVD.tabbedPanel, "Input The Threshold Value", "Edit Threshold", JOptionPane.QUESTION_MESSAGE);
+                try {
+                    if(inputValue != null) {
+                        threshold = Double.parseDouble(inputValue);
+                        registerProgress(100, "Valor de Threshold ha sido editado: "+threshold);
+                    }
+                } catch(NumberFormatException exc) {
+                    JOptionPane.showMessageDialog(FalconSVD.tabbedPanel, "Threshold value must be numeric", "Edit Threshold", JOptionPane.ERROR_MESSAGE);
+                }
             }
-        } catch(NumberFormatException exc) {
-            JOptionPane.showMessageDialog(FalconSVD.tabbedPanel, "Threshold value must be numeric", "Edit Threshold", JOptionPane.ERROR_MESSAGE);
-        }
+        };
+        Thread hilo = new Thread(runnable);
+        hilo.start();
     }
     
     /**

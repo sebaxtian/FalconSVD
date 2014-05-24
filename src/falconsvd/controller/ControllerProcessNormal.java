@@ -28,19 +28,24 @@ public class ControllerProcessNormal {
     public static ImagePNM imageNormal;
     
     public static void actionPerformed(ActionEvent e) {
-        NormalImage normalImage = new NormalImage(ControllerOpenTarget.imageTarget, ControllerProcessMedia.imageMedia);
-        normalImage.buildNormalImage();
-        registerProgress(50, "Construye con exito la imagen normal");
-        imageNormal = normalImage.getImageNormal();
-        CanvasPNM canvasPNM = new CanvasPNM(imageNormal, FalconSVD.panelDrawNormal.getSize());
-        FalconSVD.panelDrawNormal.removeAll();
-        FalconSVD.panelDrawNormal.add(canvasPNM, BorderLayout.CENTER);
-        canvasPNM.repaint();
-        registerProgress(100, "Se pinta la imagen sobre el canvas Normal");
-        FalconSVD.menuSaveNormal.setEnabled(true);
-        FalconSVD.menuFalconMake.setEnabled(true);
-        normalImage = null;
-        canvasPNM = null;
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                NormalImage normalImage = new NormalImage(ControllerOpenTarget.imageTarget, ControllerProcessMedia.imageMedia);
+                normalImage.buildNormalImage();
+                registerProgress(50, "Construye con exito la imagen normal");
+                imageNormal = normalImage.getImageNormal();
+                CanvasPNM canvasPNM = new CanvasPNM(imageNormal, FalconSVD.panelDrawNormal.getSize());
+                FalconSVD.panelDrawNormal.removeAll();
+                FalconSVD.panelDrawNormal.add(canvasPNM, BorderLayout.CENTER);
+                canvasPNM.repaint();
+                registerProgress(100, "Se pinta la imagen sobre el canvas Normal");
+                FalconSVD.menuSaveNormal.setEnabled(true);
+                FalconSVD.menuFalconMake.setEnabled(true);
+            }
+        };
+        Thread hilo = new Thread(runnable);
+        hilo.start();
     }
     
     /**

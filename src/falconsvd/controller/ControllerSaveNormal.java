@@ -26,21 +26,26 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 public class ControllerSaveNormal {
     
     public static void actionPerformed(ActionEvent e) {
-        JFileChooser fileChooser = new JFileChooser("faces/");
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("PPM, PGM, PBM", "ppm", "pgm", "pbm");
-        fileChooser.setFileFilter(filter);
-        int selection = fileChooser.showSaveDialog(FalconSVD.tabbedPanel);
-        if(selection == JFileChooser.APPROVE_OPTION) {
-            File file = fileChooser.getSelectedFile();
-            registerProgress(25, "La imagen normal se guardara en el archivo "+file.getName());
-            FilePNM filePNM = new FilePNM(file.getAbsolutePath());
-            filePNM.setImagePNM(ControllerProcessNormal.imageNormal);
-            registerProgress(50, "Se inicia la configuracion y escritura del archivo");
-            filePNM.saveFile();
-            registerProgress(100, "El archivo de imagen normal se ha guardado con exito");
-            file = null;
-            filePNM = null;
-        }
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                JFileChooser fileChooser = new JFileChooser("faces/");
+                FileNameExtensionFilter filter = new FileNameExtensionFilter("PPM, PGM, PBM", "ppm", "pgm", "pbm");
+                fileChooser.setFileFilter(filter);
+                int selection = fileChooser.showSaveDialog(FalconSVD.tabbedPanel);
+                if(selection == JFileChooser.APPROVE_OPTION) {
+                    File file = fileChooser.getSelectedFile();
+                    registerProgress(25, "La imagen normal se guardara en el archivo "+file.getName());
+                    FilePNM filePNM = new FilePNM(file.getAbsolutePath());
+                    filePNM.setImagePNM(ControllerProcessNormal.imageNormal);
+                    registerProgress(50, "Se inicia la configuracion y escritura del archivo");
+                    filePNM.saveFile();
+                    registerProgress(100, "El archivo de imagen normal se ha guardado con exito");
+                }
+            }
+        };
+        Thread hilo = new Thread(runnable);
+        hilo.start();
     }
     
     /**

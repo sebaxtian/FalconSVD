@@ -15,7 +15,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  * Esta es una clase controladora de eventos para el
- * elemento de menu 'Save -> Media' de la clase JFrame
+ * elemento de menu 'Save -> Match' de la clase JFrame
  * falconsvd.gui.FalconSVD.
  * 
  * @author sebaxtian
@@ -23,7 +23,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  */
 
 
-public class ControllerSaveMedia {
+public class ControllerSaveMatch {
     
     public static void actionPerformed(ActionEvent e) {
         Runnable runnable = new Runnable() {
@@ -35,12 +35,12 @@ public class ControllerSaveMedia {
                 int selection = fileChooser.showSaveDialog(FalconSVD.tabbedPanel);
                 if(selection == JFileChooser.APPROVE_OPTION) {
                     File file = fileChooser.getSelectedFile();
-                    registerProgress(25, "La imagen media se guardara en el archivo "+file.getName());
+                    registerProgress(25, "La imagen match se guardara en el archivo "+file.getName());
                     FilePNM filePNM = new FilePNM(file.getAbsolutePath());
-                    filePNM.setImagePNM(ControllerProcessMedia.imageMedia);
+                    filePNM.setImagePNM(ControllerFalconRecognition.imageMatch);
                     registerProgress(50, "Se inicia la configuracion y escritura del archivo");
                     filePNM.saveFile();
-                    registerProgress(100, "El archivo de imagen media se ha guardado con exito");
+                    registerProgress(100, "El archivo de imagen match se ha guardado con exito");
                 }
             }
         };
@@ -50,8 +50,7 @@ public class ControllerSaveMedia {
     
     /**
      * Metodo que registra en el area de log el progreso de la construccion
-     * del archivo media de las imagenes en el conjunto de imagenes de la DB y
-     * cuando se guarda el archivo.
+     * del archivo match cuando se guarda el archivo.
      * 
      * @param progress
      * @param message 
@@ -62,7 +61,7 @@ public class ControllerSaveMedia {
             public void run() {
                 try {
                     Thread.sleep(300);
-                    FalconSVD.textAreaLog.append("SaveMedia::FalconSVD [OK]\t "+message+"\n");
+                    FalconSVD.textAreaLog.append("SaveMatch::FalconSVD [OK]\t "+message+"\n");
                     FalconSVD.progressBar.setValue(progress);
                     FalconSVD.progressBar.setString(progress+"%");
                     if(progress == 100) {
@@ -71,7 +70,7 @@ public class ControllerSaveMedia {
                         FalconSVD.progressBar.setString(0+"%");
                     }
                 } catch (InterruptedException ex) {
-                    FalconSVD.textAreaLog.append("SaveMedia::FalconSVD [ERROR]\t Error al dormir hilo");
+                    FalconSVD.textAreaLog.append("SaveMatch::FalconSVD [ERROR]\t Error al dormir hilo");
                 }
             }
         };

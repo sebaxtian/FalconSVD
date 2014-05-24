@@ -28,18 +28,24 @@ public class ControllerProcessMedia {
     public static ImagePNM imageMedia;
     
     public static void actionPerformed(ActionEvent e) {
-        ControllerSelectDB.dbImages.buildMediaImages();
-        registerProgress(25, "Construye con exito la matrix media de la DB de imagenes");
-        imageMedia = ControllerSelectDB.dbImages.getImageMedia();
-        registerProgress(50, "Se crea con exito la imagen media");
-        CanvasPNM canvasPNM = new CanvasPNM(imageMedia, FalconSVD.panelDrawMedia.getSize());
-        FalconSVD.panelDrawMedia.removeAll();
-        FalconSVD.panelDrawMedia.add(canvasPNM, BorderLayout.CENTER);
-        canvasPNM.repaint();
-        registerProgress(100, "Se pinta la imagen sobre el canvas Media");
-        FalconSVD.menuProcessNormal.setEnabled(true);
-        FalconSVD.menuSaveMedia.setEnabled(true);
-        canvasPNM = null;
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                ControllerSelectDB.dbImages.buildMediaImages();
+                registerProgress(25, "Construye con exito la matrix media de la DB de imagenes");
+                imageMedia = ControllerSelectDB.dbImages.getImageMedia();
+                registerProgress(50, "Se crea con exito la imagen media");
+                CanvasPNM canvasPNM = new CanvasPNM(imageMedia, FalconSVD.panelDrawMedia.getSize());
+                FalconSVD.panelDrawMedia.removeAll();
+                FalconSVD.panelDrawMedia.add(canvasPNM, BorderLayout.CENTER);
+                canvasPNM.repaint();
+                registerProgress(100, "Se pinta la imagen sobre el canvas Media");
+                FalconSVD.menuProcessNormal.setEnabled(true);
+                FalconSVD.menuSaveMedia.setEnabled(true);
+            }
+        };
+        Thread hilo = new Thread(runnable);
+        hilo.start();
     }
     
     /**

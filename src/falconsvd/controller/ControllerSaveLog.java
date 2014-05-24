@@ -28,18 +28,24 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 public class ControllerSaveLog {
 
     public static void actionPerformed(ActionEvent e) {
-        JFileChooser fileChooser = new JFileChooser("faces/");
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("TXT", "txt");
-        fileChooser.setFileFilter(filter);
-        int selection = fileChooser.showSaveDialog(FalconSVD.tabbedPanel);
-        if(selection == JFileChooser.APPROVE_OPTION) {
-            File file = fileChooser.getSelectedFile();
-            registerProgress(25, "Los datos del Log se guardaran en el archivo "+file.getName());
-            registerProgress(50, "Se inicia la configuracion y escritura del archivo");
-            saveFile(FalconSVD.textAreaLog.getText(), file);
-            registerProgress(100, "El archivo de Log se ha guardado con exito");
-            file = null;
-        }
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                JFileChooser fileChooser = new JFileChooser("faces/");
+                FileNameExtensionFilter filter = new FileNameExtensionFilter("TXT", "txt");
+                fileChooser.setFileFilter(filter);
+                int selection = fileChooser.showSaveDialog(FalconSVD.tabbedPanel);
+                if(selection == JFileChooser.APPROVE_OPTION) {
+                    File file = fileChooser.getSelectedFile();
+                    registerProgress(25, "Los datos del Log se guardaran en el archivo "+file.getName());
+                    registerProgress(50, "Se inicia la configuracion y escritura del archivo");
+                    saveFile(FalconSVD.textAreaLog.getText(), file);
+                    registerProgress(100, "El archivo de Log se ha guardado con exito");
+                }
+            }
+        };
+        Thread hilo = new Thread(runnable);
+        hilo.start();
     }
     
     /**

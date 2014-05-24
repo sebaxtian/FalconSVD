@@ -32,30 +32,34 @@ public class ControllerOpenTarget {
     public static ImagePNM imageTarget;
     
     public static void actionPerformed(ActionEvent e) {
-        JFileChooser fileChooser = new JFileChooser("faces/");
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("PPM, PGM, PBM", "ppm", "pgm", "pbm");
-        fileChooser.setFileFilter(filter);
-        int selection = fileChooser.showOpenDialog(FalconSVD.tabbedPanel);
-        if(selection == JFileChooser.APPROVE_OPTION) {
-            File file = fileChooser.getSelectedFile();
-            registerProgress(25, "Archivo de imagen seleccionado "+file.getName());
-            FilePNM filePNMTarget = new FilePNM(file.getAbsolutePath());
-            filePNMTarget.openFile();
-            registerProgress(60, "Se ha leido con exito el archivo de imagen");
-            // draw image on Panel
-            imageTarget = filePNMTarget.getImagePNM();
-            CanvasPNM canvasPNM = new CanvasPNM(imageTarget, FalconSVD.panelDrawTarget.getSize());
-            FalconSVD.panelDrawTarget.removeAll();
-            FalconSVD.panelDrawTarget.add(canvasPNM, BorderLayout.CENTER);
-            canvasPNM.repaint();
-            registerProgress(100, "Se pinta la imagen sobre el canvas Target");
-            FalconSVD.menuSelectDBSomebody.setEnabled(true);
-            FalconSVD.menuSelectDBPeople.setEnabled(true);
-            FalconSVD.menuSaveLog.setEnabled(true);
-            file = null;
-            filePNMTarget = null;
-            canvasPNM = null;
-        }
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                JFileChooser fileChooser = new JFileChooser("faces/");
+                FileNameExtensionFilter filter = new FileNameExtensionFilter("PPM, PGM, PBM", "ppm", "pgm", "pbm");
+                fileChooser.setFileFilter(filter);
+                int selection = fileChooser.showOpenDialog(FalconSVD.tabbedPanel);
+                if(selection == JFileChooser.APPROVE_OPTION) {
+                    File file = fileChooser.getSelectedFile();
+                    registerProgress(25, "Archivo de imagen seleccionado "+file.getName());
+                    FilePNM filePNMTarget = new FilePNM(file.getAbsolutePath());
+                    filePNMTarget.openFile();
+                    registerProgress(60, "Se ha leido con exito el archivo de imagen");
+                    // draw image on Panel
+                    imageTarget = filePNMTarget.getImagePNM();
+                    CanvasPNM canvasPNM = new CanvasPNM(imageTarget, FalconSVD.panelDrawTarget.getSize());
+                    FalconSVD.panelDrawTarget.removeAll();
+                    FalconSVD.panelDrawTarget.add(canvasPNM, BorderLayout.CENTER);
+                    canvasPNM.repaint();
+                    registerProgress(100, "Se pinta la imagen sobre el canvas Target");
+                    FalconSVD.menuSelectDBSomebody.setEnabled(true);
+                    FalconSVD.menuSelectDBPeople.setEnabled(true);
+                    FalconSVD.menuSaveLog.setEnabled(true);
+                }
+            }
+        };
+        Thread hilo = new Thread(runnable);
+        hilo.start();
     }
     
     /**

@@ -25,13 +25,23 @@ public class ControllerFalconMake {
     public static FalconSVD falconSVD;
     
     public static void actionPerformed(ActionEvent e) {
-        Matrix matrixDB = ControllerSelectDB.dbImages.getReduceMatrixDBImages();
-        Matrix matrixMedia = ControllerSelectDB.dbImages.getReduceMatrixMediaImages();
-        registerProgress(50, "Se obtiene con exito la matrix media de la DB de imagenes");
-        falconSVD = new FalconSVD(matrixDB, matrixMedia);
-        registerProgress(100, "Se crea con exito el objeto de reconocimiento FalconSVD");
-        falconsvd.gui.FalconSVD.menuFalconDetection.setEnabled(true);
-        falconsvd.gui.FalconSVD.menuFalconRecognition.setEnabled(true);
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                registerProgress(25, "Incia carga de matrix DB de imagenes");
+                Matrix matrixDB = ControllerSelectDB.dbImages.getReduceMatrixDBImages();
+                registerProgress(50, "Inicia carga matrix media de la DB de imagenes");
+                Matrix matrixMedia = ControllerSelectDB.dbImages.getReduceMatrixMediaImages();
+                registerProgress(60, "Se carga la matrix DB con exito");
+                registerProgress(70, "Se carga la matrix media con exito");
+                falconSVD = new FalconSVD(matrixDB, matrixMedia);
+                registerProgress(100, "Se crea con exito el objeto de reconocimiento FalconSVD");
+                falconsvd.gui.FalconSVD.menuFalconDetection.setEnabled(true);
+                falconsvd.gui.FalconSVD.menuFalconRecognition.setEnabled(true);
+            }
+        };
+        Thread hilo = new Thread(runnable);
+        hilo.start();
     }
     
     /**

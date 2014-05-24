@@ -98,6 +98,8 @@ public class FalconSVD {
      * y el espacio de proyeccion.
      */
     private void detectionDistance(int typeNorma) {
+        matrixTarget = matrixTarget.minus(matrixMedia);
+        
         Matrix UUt = matrixUPrima.times(matrixUPrima.transpose());
         Matrix I = Matrix.identity(UUt.getRowDimension(), UUt.getColumnDimension());
         
@@ -105,12 +107,12 @@ public class FalconSVD {
         Matrix resta2 = matrixTarget.minus(matrixMedia);
         
         Matrix product = resta1.times(resta2);
+        
         double valorAprox = getNorma(product, typeNorma);
         double valorReal = getNorma(matrixTarget, typeNorma);
         System.out.println("Rows MatrixProduct: "+product.getRowDimension());
         System.out.println("Colums MatrixProduct: "+product.getColumnDimension());
         distance = Math.abs((valorAprox - valorReal) / valorReal);
-        distance = valorAprox;
         System.out.println("Distancia: "+distance);
     }
     
@@ -120,6 +122,8 @@ public class FalconSVD {
      * y el espacio de proyeccion que mas se aproxima.
      */
     private void detectionMatrix(int typeNorma) {
+        matrixTarget = matrixTarget.minus(matrixMedia);
+        
         Matrix projectionTarget = getProjection(matrixTarget);
         double minDistancia = Double.MAX_VALUE;
         int k = 0;
@@ -132,7 +136,9 @@ public class FalconSVD {
                 k = j;
             }
         }
+        
         System.out.println("minDistancia "+minDistancia);
+        
         matrixMatch = matrixTraining.getMatrix(0, matrixTraining.getRowDimension()-1, k, k);
         indexMatrixMatch = k;
     }
