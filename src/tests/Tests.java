@@ -8,8 +8,10 @@ package tests;
 
 import Jama.EigenvalueDecomposition;
 import Jama.Matrix;
+import falconsvd.model.FalconSVD;
 import falconsvd.model.FilePNM;
 import falconsvd.model.ImagePNM;
+import falconsvd.model.ReduceMatrix;
 import java.text.NumberFormat;
 
 /**
@@ -22,6 +24,7 @@ import java.text.NumberFormat;
 
 public class Tests {
 
+    /*
     public static void pruebaSVD() {
         
         double[][] a = {{2, 0,  8, 6, 0},
@@ -47,13 +50,11 @@ public class Tests {
         
         Matrix A = new Matrix(a);
         
-        /*
         FilePNM filePNM = new FilePNM("faces/dataset/pgm/s10_ascii/output_5.pgm");
         filePNM.openFile();
         ImagePNM imagePNM = filePNM.getImagePNM();
         System.out.println(imagePNM.getCodMagic()+"");
         A = imagePNM.getMatrix();
-        */
         
         TestSVD testSVD = new TestSVD(A);
         testSVD.ejecutarMetodoSVD();
@@ -80,13 +81,12 @@ public class Tests {
         System.out.println("---- Matrix C == A ----");
         C.print(C.getColumnDimension(), 4);
         
-        /*
         imagePNM.setMatrix(C);
         filePNM.setImagePNM(imagePNM);
         filePNM.setUrltofile("output/output_5SVD.pgm");
         filePNM.saveFile();
-        */
     }
+    */
     
     public static void imprimirMatrix(Matrix X) {
         int rows = X.getRowDimension();
@@ -104,6 +104,7 @@ public class Tests {
         System.out.println("");
     }
     
+    /*
     public static void pruebaMatrixDB() {
         double[][] a = {{8, 5},
                         {1, 9},
@@ -152,6 +153,7 @@ public class Tests {
         valor /= 3;
         System.out.println(""+valor);
     }
+    */
     
     public static void imprimirVector(double[] vector) {
         for (int i = 0; i < vector.length; i++) {
@@ -161,7 +163,7 @@ public class Tests {
     }
     
     
-    
+    /*
     public static void pruebaReconocimiento() {
         int rows = 15;
         int colums = 4;
@@ -233,7 +235,7 @@ public class Tests {
         System.out.println("Range "+reconocimiento.getRange());
         
     }
-    
+    */
     
     private static double getMedia(Matrix row) {
         double media = 0;
@@ -245,7 +247,111 @@ public class Tests {
     }
     
     
+    public static void pruebaAlgoritmo() {
+        int rows = 112;
+        int colums = 92;
+        int numImagenes = 10;
+        double factor = 0.2;
+        // imagenes
+        Matrix[] imagenes = new Matrix[numImagenes];
+        for (int i = 0; i < imagenes.length; i++) {
+            //imagenes[i] = Matrix.random(rows, colums);
+            Matrix matrix = Matrix.random(rows, colums);
+            imagenes[i] = new ReduceMatrix(matrix, factor).getMatrixReduce();
+        }
+        rows = imagenes[0].getRowDimension();
+        colums = imagenes[0].getColumnDimension();
+        int numPixeles = rows * colums;
+        
+        // base de datos de imagenes
+        Matrix matrixDB = new Matrix(numPixeles, numImagenes);
+        for (int j = 0; j < numImagenes; j++) {
+            double[] pixeles = imagenes[j].getColumnPackedCopy();
+            Matrix vectorPixeles = new Matrix(pixeles, numPixeles);
+            matrixDB.setMatrix(0, numPixeles-1, j, j, vectorPixeles);
+        }
+        
+        // media de la base de datos
+        Matrix matrixMedia = new Matrix(numPixeles, 1);
+        for (int i = 0; i < matrixDB.getRowDimension(); i++) {
+            Matrix row = matrixDB.getMatrix(i, i, 0, numImagenes-1);
+            matrixMedia.set(i, 0, getMedia(row));
+        }
+        
+        // matrix target
+        Matrix matrixTarget1 = matrixDB.getMatrix(0, numPixeles-1, 2, 2);
+        Matrix matrixTarget2 = Matrix.random(rows, colums);
+        double[] pixeles = matrixTarget2.getColumnPackedCopy();
+        matrixTarget2 = new Matrix(pixeles, numPixeles);
+        
+        
+        // umbral
+        double threshold = 0.6;
+        
+        FalconSVD algoritmo = new FalconSVD(matrixDB, matrixMedia);
+        
+        // imprimir datos
+        System.out.println("----->> Matrix matrixDB");
+        System.out.println("Rows: "+matrixDB.getRowDimension()+" Colums: "+matrixDB.getColumnDimension());
+        //imprimirMatrix(matrixDB);
+        
+        System.out.println("----->> Matrix matrixTarget1");
+        System.out.println("Rows: "+matrixTarget1.getRowDimension()+" Colums: "+matrixTarget1.getColumnDimension());
+        //imprimirMatrix(matrixTarget1);
+        
+        System.out.println("----->> Matrix matrixTarget2");
+        System.out.println("Rows: "+matrixTarget2.getRowDimension()+" Colums: "+matrixTarget2.getColumnDimension());
+        //imprimirMatrix(matrixTarget2);
+        
+        System.out.println("----->> Matrix matrixMedia");
+        System.out.println("Rows: "+algoritmo.getMatrixMedia().getRowDimension()+" Colums: "+algoritmo.getMatrixMedia().getColumnDimension());
+        //imprimirMatrix(algoritmo.getMatrixMedia());
+        
+        System.out.println("----->> Matrix matrixTraining");
+        System.out.println("Rows: "+algoritmo.getMatrixTraining().getRowDimension()+" Colums: "+algoritmo.getMatrixTraining().getColumnDimension());
+        //imprimirMatrix(algoritmo.getMatrixTraining());
+        
+        System.out.println("----->> Matrix matrixU");
+        System.out.println("Rows: "+algoritmo.getMatrixU().getRowDimension()+" Colums: "+algoritmo.getMatrixU().getColumnDimension());
+        //imprimirMatrix(algoritmo.getMatrixU());
+        
+        System.out.println("----->> Matrix matrixS");
+        System.out.println("Rows: "+algoritmo.getMatrixS().getRowDimension()+" Colums: "+algoritmo.getMatrixS().getColumnDimension());
+        //imprimirMatrix(algoritmo.getMatrixS());
+        
+        System.out.println("----->> Matrix matrixV");
+        System.out.println("Rows: "+algoritmo.getMatrixV().getRowDimension()+" Colums: "+algoritmo.getMatrixV().getColumnDimension());
+        //imprimirMatrix(algoritmo.getMatrixV());
+        
+        
+        System.out.println("\n---->> Deteccion De Imagen Target1 Norma2");
+        int kFaces = algoritmo.getMatrixTraining().rank();
+        algoritmo.makeDetection(kFaces, FalconSVD.NORMA2, matrixTarget1);
+        double distance = algoritmo.getDistance();
+        System.out.println("Threshold: "+threshold);
+        System.out.println("Distance: "+distance);
+        if(distance <= threshold) {
+            System.out.println("Imagen Detectada");
+        } else {
+            System.out.println("Imagen No Detectada");
+        }
+        
+        
+        System.out.println("\n---->> Deteccion De Imagen Target2 Norma2");
+        kFaces = algoritmo.getMatrixTraining().rank();
+        algoritmo.makeDetection(kFaces, FalconSVD.NORMA2, matrixTarget2);
+        distance = algoritmo.getDistance();
+        System.out.println("Threshold: "+threshold);
+        System.out.println("Distance: "+distance);
+        if(distance <= threshold) {
+            System.out.println("Imagen Detectada");
+        } else {
+            System.out.println("Imagen No Detectada");
+        }
+        
+    }
     
+    /*
     public static void pruebaFaceDetection() {
         int rows = 12;
         int colums = 4;
@@ -361,7 +467,7 @@ public class Tests {
         imprimirMatrix(faceDetection.getMatrixMatch());
         System.out.println("indexMatrixMatch "+faceDetection.getIndexMatrixMatch());
     }
-    
+    */
     
     
     public static void main(String[] args) {
@@ -380,6 +486,8 @@ public class Tests {
         imprimirMatrix(producto);
         */
         
-        pruebaFaceDetection();
+        //pruebaFaceDetection();
+        
+        pruebaAlgoritmo();
     }
 }

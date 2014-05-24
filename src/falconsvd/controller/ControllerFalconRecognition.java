@@ -28,12 +28,12 @@ public class ControllerFalconRecognition {
     public static Matrix matrixMatch;
     public static int indexMatrixMatch;
     public static ImagePNM imageMatch;
-    public static ImagePNM imageDB;
     
     public static void actionPerformed(ActionEvent e) {
         int kFaces = ControllerFalconMake.falconSVD.getMatrixTraining().rank(); // pueden ser dinamicos
         int norma = FalconSVD.NORMA2; // pueden ser dinamicos
-        Matrix matrixTarget = ControllerOpenTarget.imageTarget.getMatrix();
+        //Matrix matrixTarget = ControllerOpenTarget.imageTarget.getMatrix();
+        Matrix matrixTarget = ControllerOpenTarget.imageTarget.getReduceMatrix();
         double[] pixeles = matrixTarget.getRowPackedCopy();
         matrixTarget = new Matrix(pixeles, matrixTarget.getRowDimension()*matrixTarget.getColumnDimension());
         registerProgress(30, "Se obtiene con exito la imagen target");
@@ -44,10 +44,10 @@ public class ControllerFalconRecognition {
         indexMatrixMatch = ControllerFalconMake.falconSVD.getIndexMatrixMatch();
         registerProgress(60, "Se obtiene el indice de la matrix que se aproxima a la imagen objetivo");
         // construye imagen match
-        buildMatchImage();
+        //buildMatchImage();
         registerProgress(70, "Construye el objeto de ImagePNM de la matrix Match");
         // construye imagen DB
-        buildDBImage();
+        buildImageMatch();
         registerProgress(80, "Construye el objeto de ImagePNM de la matrix indexMatch en DB");
         // pinta imagen match
         CanvasPNM canvasPNMImageMatch = new CanvasPNM(imageMatch, falconsvd.gui.FalconSVD.panelDrawMatch.getSize());
@@ -55,8 +55,9 @@ public class ControllerFalconRecognition {
         falconsvd.gui.FalconSVD.panelDrawMatch.add(canvasPNMImageMatch, BorderLayout.CENTER);
         canvasPNMImageMatch.repaint();
         registerProgress(90, "Pinta imagen Match en el canvas");
-        // pinta imagen db
-        CanvasPNM canvasPNMImageDB = new CanvasPNM(imageDB, falconsvd.gui.FalconSVD.panelDrawMatchDB.getSize());
+        // pinta imagen target
+        ImagePNM imageTarget = ControllerOpenTarget.imageTarget;
+        CanvasPNM canvasPNMImageDB = new CanvasPNM(imageTarget, falconsvd.gui.FalconSVD.panelDrawMatchDB.getSize());
         falconsvd.gui.FalconSVD.panelDrawMatchDB.removeAll();
         falconsvd.gui.FalconSVD.panelDrawMatchDB.add(canvasPNMImageDB, BorderLayout.CENTER);
         canvasPNMImageDB.repaint();
@@ -65,41 +66,10 @@ public class ControllerFalconRecognition {
     
     
     /**
-     * Construye un objeto ImagePNM con la matrix que coincide con 
-     * la imagen de objetivo.
-     */
-    private static void buildMatchImage() {
-        ImagePNM imageTarget = ControllerOpenTarget.imageTarget;
-        
-        String codMagic = imageTarget.getCodMagic();
-        String description = "Imagen Que Coincide Con La Imagen Target";
-        int rows = imageTarget.getRows();
-        int colums = imageTarget.getColums();
-        int intensity = imageTarget.getIntensity();
-        
-        Matrix matrixMatchImage = new Matrix(rows, colums);
-        
-        // construye la matrix de imagen
-        int j0 = 0;
-        int j1 = colums-1;
-        for (int i = 0; i < rows; i++) {
-            Matrix rowImage = matrixMatch.getMatrix(j0, j1, 0, 0);
-            rowImage = rowImage.transpose();
-            matrixMatchImage.setMatrix(i, i, 0, colums-1, rowImage);
-            j0 += colums;
-            j1 += colums;
-        }
-        
-        // construye el objeto de imagen PNM
-        imageMatch = new ImagePNM(codMagic, description, rows, colums, intensity, matrixMatchImage);
-    }
-    
-    
-    /**
      * Construye un objeto ImagePNM con la matrix de la imagen DB 
      * que coincide con la imagen de objetivo.
      */
-    private static void buildDBImage() {
+    private static void buildImageMatch() {
         ImagePNM imageTarget = ControllerOpenTarget.imageTarget;
         
         String codMagic = imageTarget.getCodMagic();
@@ -124,7 +94,7 @@ public class ControllerFalconRecognition {
         }
         
         // construye el objeto de imagen PNM
-        imageDB = new ImagePNM(codMagic, description, rows, colums, intensity, matrixDBImage);
+        imageMatch = new ImagePNM(codMagic, description, rows, colums, intensity, matrixDBImage);
     }
     
     

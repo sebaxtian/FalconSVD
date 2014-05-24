@@ -35,6 +35,8 @@ public class DBImages {
     private Matrix dbImages;
     private Matrix mediaImages;
     private ImagePNM imageMedia;
+    private Matrix reduceDBImages;
+    private Matrix reduceMediaImages;
     
     
     /**
@@ -64,6 +66,27 @@ public class DBImages {
             Matrix matrixPixels = new Matrix(pixels, numPixels);
             dbImages.setMatrix(0, numPixels-1, k, k, matrixPixels);
         }
+        buildDBImagesReduce();
+    }
+    
+    /**
+     * Metodo que construye una matrix que representa la base de datos
+     * del conjunto de imagenes, cada columna en la matriz contiene
+     * los pixeles de cada imagen del conjunto de imagenes.
+     * En forma reducida.
+     */
+    private void buildDBImagesReduce() {
+        int rows = pnmImages.get(0).getReduceMatrix().getRowDimension();
+        int colums = pnmImages.get(0).getReduceMatrix().getColumnDimension();
+        int numPixels = rows * colums;
+        int numImages = pnmImages.size();
+        // matriz que representa la base de datos
+        reduceDBImages = new Matrix(numPixels, numImages);
+        for (int k = 0; k < numImages; k++) {
+            double[] pixels = pnmImages.get(k).getReduceMatrix().getRowPackedCopy();
+            Matrix matrixPixels = new Matrix(pixels, numPixels);
+            reduceDBImages.setMatrix(0, numPixels-1, k, k, matrixPixels);
+        }
     }
     
     /**
@@ -76,6 +99,21 @@ public class DBImages {
         for (int k = 0; k < dbImages.getRowDimension(); k++) {
             Matrix rowPixels = dbImages.getMatrix(k, k, 0, dbImages.getColumnDimension()-1);
             mediaImages.set(k, 0, getMedia(rowPixels));
+        }
+        buildMediaImagesReduce();
+    }
+    
+    /**
+     * Metodo que construye una matrix de una sola columna donde se
+     * guardan los pixeles de la media de todas las imagenes del
+     * conjunto de imagenes.
+     * En forma reducida.
+     */
+    private void buildMediaImagesReduce() {
+        reduceMediaImages = new Matrix(reduceDBImages.getRowDimension(), 1);
+        for (int k = 0; k < reduceDBImages.getRowDimension(); k++) {
+            Matrix rowPixels = reduceDBImages.getMatrix(k, k, 0, reduceDBImages.getColumnDimension()-1);
+            reduceMediaImages.set(k, 0, getMedia(rowPixels));
         }
     }
     
@@ -139,6 +177,28 @@ public class DBImages {
      */
     public Matrix getMatrixMediaImages() {
         return mediaImages;
+    }
+    
+    /**
+     * Permite obtener el objeto Matrix que representa la base de datos
+     * del conjunto de imagenes.
+     * En forma reducida.
+     * 
+     * @return Matrix
+     */
+    public Matrix getReduceMatrixDBImages() {
+        return reduceDBImages;
+    }
+    
+    /**
+     * Permite obtener el objeto Matrix que representa la imagen de 
+     * la media del conjunto de imagenes.
+     * En forma reducida.
+     * 
+     * @return Matrix
+     */
+    public Matrix getReduceMatrixMediaImages() {
+        return reduceMediaImages;
     }
     
 }

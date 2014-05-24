@@ -25,15 +25,13 @@ public class ControllerFalconMake {
     public static FalconSVD falconSVD;
     
     public static void actionPerformed(ActionEvent e) {
-        Matrix matrixDB = ControllerSelectDB.dbImages.getMatrixDBImages();
-        Matrix matrixMedia = ControllerSelectDB.dbImages.getMatrixMediaImages();
+        Matrix matrixDB = ControllerSelectDB.dbImages.getReduceMatrixDBImages();
+        Matrix matrixMedia = ControllerSelectDB.dbImages.getReduceMatrixMediaImages();
         registerProgress(50, "Se obtiene con exito la matrix media de la DB de imagenes");
         falconSVD = new FalconSVD(matrixDB, matrixMedia);
         registerProgress(100, "Se crea con exito el objeto de reconocimiento FalconSVD");
         falconsvd.gui.FalconSVD.menuFalconDetection.setEnabled(true);
         falconsvd.gui.FalconSVD.menuFalconRecognition.setEnabled(true);
-        matrixDB = null;
-        matrixMedia = null;
     }
     
     /**

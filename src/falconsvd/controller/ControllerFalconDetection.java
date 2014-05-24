@@ -28,7 +28,7 @@ public class ControllerFalconDetection {
     public static void actionPerformed(ActionEvent e) {
         int kFaces = ControllerFalconMake.falconSVD.getMatrixTraining().rank(); // pueden ser dinamicos
         int norma = FalconSVD.NORMA2; // pueden ser dinamicos
-        Matrix matrixTarget = ControllerOpenTarget.imageTarget.getMatrix();
+        Matrix matrixTarget = ControllerOpenTarget.imageTarget.getReduceMatrix();
         double[] pixeles = matrixTarget.getColumnPackedCopy();
         matrixTarget = new Matrix(pixeles, matrixTarget.getRowDimension()*matrixTarget.getColumnDimension());
         registerProgress(30, "Se obtiene con exito la imagen target");

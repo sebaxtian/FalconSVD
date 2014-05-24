@@ -46,6 +46,7 @@ public class ImagePNM {
     private int colums;
     private int intensity;
     private Matrix matrix;
+    private Matrix scalarMatrix;
     
     /**
      * Metodo constructor de clase
@@ -72,6 +73,16 @@ public class ImagePNM {
         this.rows = rows;
         this.intensity = intensity;
         this.matrix = matrix;
+        this.scalarMatrix = scalarMatrix(0.2);
+    }
+    
+    /**
+     * Escalacion bicubica de la matrix.
+     * @param factor
+     * @return Matrix
+     */
+    private Matrix scalarMatrix(double factor) {
+        return new ReduceMatrix(this.matrix, factor).getMatrixReduce();
     }
 
     /**
@@ -156,6 +167,13 @@ public class ImagePNM {
      */
     public void setMatrix(Matrix matrix) {
         this.matrix = matrix;
+    }
+    
+    /**
+     * @return the scalarMatrix
+     */
+    public Matrix getReduceMatrix() {
+        return scalarMatrix;
     }
     
 }

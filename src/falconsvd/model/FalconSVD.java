@@ -32,7 +32,6 @@ public class FalconSVD {
     private Matrix matrixDB;            // matrix de imagenes de la base de datos
     private Matrix matrixTraining;      // matrix de imagenes de la base de datos normalizada
     private Matrix matrixMedia;         // matrix de la imagen promedio
-    private Matrix matrixCovariance;    // matrix de covarianza
     private Matrix matrixU;             // matrix U de la descomposicion SVD
     private Matrix matrixS;             // matrix S de la descomposicion SVD
     private Matrix matrixV;             // matrix V de la descomposicion SVD
@@ -52,37 +51,8 @@ public class FalconSVD {
     public FalconSVD(Matrix matrixDB, Matrix matrixMedia) {
         this.matrixDB = matrixDB;
         this.matrixMedia = matrixMedia;
-        System.out.println("Inicia Make");
         make();
-        System.out.println("Termina Make");
     }
-    
-    
-    /**
-     * Construye la matrix de la cara promedio.
-     */
-//    private void makeMatrixMedia() {
-//        matrixMedia = new Matrix(matrixDB.getRowDimension(), 1);
-//        for (int i = 0; i < matrixDB.getRowDimension(); i++) {
-//            Matrix rowPixels = matrixDB.getMatrix(i, i, 0, matrixDB.getColumnDimension()-1);
-//            matrixMedia.set(i, 0, getMedia(rowPixels));
-//        }
-//    }
-    
-    
-    /**
-     * Calcula el valor promedio de los elementos de un vector.
-     * @param vector
-     * @return media
-     */
-//    private double getMedia(Matrix vector) {
-//        double media = 0;
-//        for (int j = 0; j < vector.getColumnDimension(); j++) {
-//            media += vector.get(0, j);
-//        }
-//        media = media / vector.getColumnDimension();
-//        return media;
-//    }
     
     
     /**
@@ -94,17 +64,7 @@ public class FalconSVD {
             Matrix imageDB = matrixDB.getMatrix(0, matrixDB.getRowDimension()-1, j, j);
             Matrix normalColum = imageDB.minus(matrixMedia);
             matrixTraining.setMatrix(0, matrixTraining.getRowDimension()-1, j, j, normalColum);
-            imageDB = null;
-            normalColum = null;
         }
-    }
-    
-    
-    /**
-     * Construye la matrix de covarianza. AA^t
-     */
-    private void makeMatrixCovarianza() {
-        matrixCovariance = matrixTraining.times(matrixTraining.transpose());
     }
     
     
@@ -129,7 +89,6 @@ public class FalconSVD {
         for (int j = 0; j < m; j++) {
             Matrix colum = matrixU.getMatrix(0, matrixU.getRowDimension()-1, j, j);
             matrixUPrima.setMatrix(0, matrixUPrima.getRowDimension()-1, j, j, colum);
-            colum = null;
         }
     }
     
@@ -146,7 +105,13 @@ public class FalconSVD {
         Matrix resta2 = matrixTarget.minus(matrixMedia);
         
         Matrix product = resta1.times(resta2);
-        distance = getNorma(product, typeNorma);
+        double valorAprox = getNorma(product, typeNorma);
+        double valorReal = getNorma(matrixTarget, typeNorma);
+        System.out.println("Rows MatrixProduct: "+product.getRowDimension());
+        System.out.println("Colums MatrixProduct: "+product.getColumnDimension());
+        distance = Math.abs((valorAprox - valorReal) / valorReal);
+        distance = valorAprox;
+        System.out.println("Distancia: "+distance);
     }
     
     
@@ -162,7 +127,7 @@ public class FalconSVD {
             Matrix imageTraining = matrixTraining.getMatrix(0, matrixTraining.getRowDimension()-1, j, j);
             Matrix resta = projectionTarget.minus(getProjection(imageTraining));
             double distancia = getNorma(resta, typeNorma);
-            if(distancia <= minDistancia) {
+            if(distancia < minDistancia) {
                 minDistancia = distancia;
                 k = j;
             }
@@ -215,12 +180,8 @@ public class FalconSVD {
      * para posteriormente ejecutar la deteccion de la cara.
      */
     private void make() {
-        // Paso 1
-        //makeMatrixMedia();
         // Paso 2
         makeMatrixTraining();
-        // Paso 3 (necesario ?)
-        //makeMatrixCovarianza();
         // Paso 4
         makeMatrixSVD();
     }
@@ -279,10 +240,6 @@ public class FalconSVD {
     
     public Matrix getMatrixMedia() {
         return matrixMedia;
-    }
-    
-    public Matrix getMatrixCovariance() {
-        return matrixCovariance;
     }
     
     public Matrix getMatrixU() {
