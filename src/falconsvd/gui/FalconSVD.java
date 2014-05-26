@@ -6,6 +6,7 @@
 
 package falconsvd.gui;
 
+import falconsvd.controller.ControllerAbout;
 import falconsvd.controller.ControllerEditThreshold;
 import falconsvd.controller.ControllerFalconDetection;
 import falconsvd.controller.ControllerFalconMake;
@@ -43,6 +44,7 @@ public class FalconSVD extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroupNorma = new javax.swing.ButtonGroup();
         tabbedPanel = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         panelDrawTarget = new javax.swing.JPanel();
@@ -69,6 +71,11 @@ public class FalconSVD extends javax.swing.JFrame {
         jMenuItem3 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         menuThreshold = new javax.swing.JMenuItem();
+        jMenu8 = new javax.swing.JMenu();
+        buttonNorma1 = new javax.swing.JRadioButtonMenuItem();
+        buttonNorma2 = new javax.swing.JRadioButtonMenuItem();
+        buttonNormaFrob = new javax.swing.JRadioButtonMenuItem();
+        buttonNormaInf = new javax.swing.JRadioButtonMenuItem();
         jMenu6 = new javax.swing.JMenu();
         menuSelectDBSomebody = new javax.swing.JMenuItem();
         menuSelectDBPeople = new javax.swing.JMenuItem();
@@ -86,7 +93,7 @@ public class FalconSVD extends javax.swing.JFrame {
         menuSaveLog = new javax.swing.JMenuItem();
         jMenu5 = new javax.swing.JMenu();
         jMenuItem9 = new javax.swing.JMenuItem();
-        jMenuItem10 = new javax.swing.JMenuItem();
+        menuAbout = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("FalconSVD");
@@ -255,6 +262,27 @@ public class FalconSVD extends javax.swing.JFrame {
         });
         jMenu2.add(menuThreshold);
 
+        jMenu8.setText("Norma");
+
+        buttonGroupNorma.add(buttonNorma1);
+        buttonNorma1.setText("Norma 1");
+        jMenu8.add(buttonNorma1);
+
+        buttonGroupNorma.add(buttonNorma2);
+        buttonNorma2.setSelected(true);
+        buttonNorma2.setText("Norma 2");
+        jMenu8.add(buttonNorma2);
+
+        buttonGroupNorma.add(buttonNormaFrob);
+        buttonNormaFrob.setText("Norma Frobenius");
+        jMenu8.add(buttonNormaFrob);
+
+        buttonGroupNorma.add(buttonNormaInf);
+        buttonNormaInf.setText("Norma Infinity");
+        jMenu8.add(buttonNormaInf);
+
+        jMenu2.add(jMenu8);
+
         jMenu6.setText("Select DB");
 
         menuSelectDBSomebody.setText("Somebody");
@@ -378,11 +406,16 @@ public class FalconSVD extends javax.swing.JFrame {
 
         jMenu5.setText("Help");
 
-        jMenuItem9.setText("Tutorial");
+        jMenuItem9.setText("Manual");
         jMenu5.add(jMenuItem9);
 
-        jMenuItem10.setText("About");
-        jMenu5.add(jMenuItem10);
+        menuAbout.setText("About");
+        menuAbout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuAboutActionPerformed(evt);
+            }
+        });
+        jMenu5.add(menuAbout);
 
         jMenuBar1.add(jMenu5);
 
@@ -461,6 +494,11 @@ public class FalconSVD extends javax.swing.JFrame {
         ControllerSaveMatch.actionPerformed(evt);
     }//GEN-LAST:event_menuSaveMatchActionPerformed
 
+    private void menuAboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuAboutActionPerformed
+        // TODO add your handling code here:
+        ControllerAbout.actionPerformed(evt);
+    }//GEN-LAST:event_menuAboutActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -497,6 +535,11 @@ public class FalconSVD extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    public static javax.swing.ButtonGroup buttonGroupNorma;
+    public static javax.swing.JRadioButtonMenuItem buttonNorma1;
+    public static javax.swing.JRadioButtonMenuItem buttonNorma2;
+    public static javax.swing.JRadioButtonMenuItem buttonNormaFrob;
+    public static javax.swing.JRadioButtonMenuItem buttonNormaInf;
     public static java.awt.Canvas canvasMatch;
     public static java.awt.Canvas canvasMedia;
     public static java.awt.Canvas canvasNormal;
@@ -509,8 +552,8 @@ public class FalconSVD extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu5;
     private javax.swing.JMenu jMenu6;
     private javax.swing.JMenu jMenu7;
+    private javax.swing.JMenu jMenu8;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem10;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem9;
     private javax.swing.JPanel jPanel1;
@@ -520,6 +563,7 @@ public class FalconSVD extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPopupMenu.Separator jSeparator1;
+    public static javax.swing.JMenuItem menuAbout;
     public static javax.swing.JMenuItem menuFalconDetection;
     public static javax.swing.JMenuItem menuFalconMake;
     public static javax.swing.JMenuItem menuFalconRecognition;

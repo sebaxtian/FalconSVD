@@ -30,7 +30,25 @@ public class ControllerFalconDetection {
             @Override
             public void run() {
                 int kFaces = ControllerFalconMake.falconSVD.getMatrixTraining().rank(); // pueden ser dinamicos
-                int norma = FalconSVD.NORMA2; // pueden ser dinamicos
+                int norma = FalconSVD.NORMA2;
+                String normaS = "Norma 2";
+                if(falconsvd.gui.FalconSVD.buttonNorma1.isSelected()) {
+                    norma = FalconSVD.NORMA1;
+                    normaS = "Norma 1";
+                }
+                if(falconsvd.gui.FalconSVD.buttonNorma2.isSelected()) {
+                    norma = FalconSVD.NORMA2;
+                    normaS = "Norma 2";
+                }
+                if(falconsvd.gui.FalconSVD.buttonNormaFrob.isSelected()) {
+                    norma = FalconSVD.NORMAFrob;
+                    normaS = "Norma Frobenius";
+                }
+                if(falconsvd.gui.FalconSVD.buttonNormaInf.isSelected()) {
+                    norma = FalconSVD.NORMAInf;
+                    normaS = "Norma Infinita";
+                }
+                registerProgress(20, "Norma seleccionada: "+normaS);
                 Matrix matrixTarget = ControllerOpenTarget.imageTarget.getReduceMatrix();
                 double[] pixeles = matrixTarget.getColumnPackedCopy();
                 matrixTarget = new Matrix(pixeles, matrixTarget.getRowDimension()*matrixTarget.getColumnDimension());
