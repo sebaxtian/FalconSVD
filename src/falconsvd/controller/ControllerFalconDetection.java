@@ -29,6 +29,7 @@ public class ControllerFalconDetection {
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
+                registerProgress(10, "Inicia la deteccion del rostro");
                 int kFaces = ControllerFalconMake.falconSVD.getMatrixTraining().rank(); // pueden ser dinamicos
                 int norma = FalconSVD.NORMA2;
                 String normaS = "Norma 2";
