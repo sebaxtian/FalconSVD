@@ -22,7 +22,7 @@ import javax.swing.JOptionPane;
 
 public class ControllerEditThreshold {
     
-    public static double threshold = 0.5;
+    public static double threshold = 30;
     
     public static void actionPerformed(ActionEvent e) {
         Runnable runnable = new Runnable() {

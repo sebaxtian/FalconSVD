@@ -49,9 +49,15 @@ public class ControllerFalconDetection {
                     normaS = "Norma Infinita";
                 }
                 registerProgress(20, "Norma seleccionada: "+normaS);
+                
+                Matrix matrixTarget = ControllerOpenTarget.imageTarget.getReduceMatrix();
+                double[] pixeles = matrixTarget.getRowPackedCopy();
+                matrixTarget = new Matrix(pixeles, matrixTarget.getRowDimension()*matrixTarget.getColumnDimension());
+                /*
                 Matrix matrixTarget = ControllerOpenTarget.imageTarget.getReduceMatrix();
                 double[] pixeles = matrixTarget.getColumnPackedCopy();
                 matrixTarget = new Matrix(pixeles, matrixTarget.getRowDimension()*matrixTarget.getColumnDimension());
+                */
                 registerProgress(30, "Se obtiene con exito la imagen target");
                 ControllerFalconMake.falconSVD.makeDetection(kFaces, norma, matrixTarget);
                 registerProgress(70, "Se calcula la deteccion de la imagen");
@@ -63,6 +69,7 @@ public class ControllerFalconDetection {
                 } else {
                     message = "La Imagen Objetivo No Fue Encontrada, Con Un Valor De Coincidencia De: "+distance;
                 }
+                registerProgress(90, message);
                 JOptionPane.showMessageDialog(falconsvd.gui.FalconSVD.panelDrawTarget, message, "Falcon Detection", JOptionPane.INFORMATION_MESSAGE);
                 registerProgress(100, "La deteccion de la imagen target se ha completado");
             }

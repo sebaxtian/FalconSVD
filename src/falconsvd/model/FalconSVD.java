@@ -110,10 +110,30 @@ public class FalconSVD {
         
         double valorAprox = getNorma(product, typeNorma);
         double valorReal = getNorma(matrixTarget, typeNorma);
-        System.out.println("Rows MatrixProduct: "+product.getRowDimension());
-        System.out.println("Colums MatrixProduct: "+product.getColumnDimension());
+        
         distance = Math.abs((valorAprox - valorReal) / valorReal);
+        
         System.out.println("Distancia: "+distance);
+    }
+    
+    
+    private void detectionDistance2(int typeNorma) {
+        matrixTarget = matrixTarget.minus(matrixMedia);
+        
+        Matrix projectionTarget = getProjection(matrixTarget);
+        double minDistancia = Double.MAX_VALUE;
+        for (int j = 0; j < matrixTraining.getColumnDimension(); j++) {
+            Matrix imageTraining = matrixTraining.getMatrix(0, matrixTraining.getRowDimension()-1, j, j);
+            Matrix resta = projectionTarget.minus(getProjection(imageTraining));
+            double distancia = getNorma(resta, typeNorma);
+            if(distancia < minDistancia) {
+                minDistancia = distancia;
+            }
+        }
+        
+        distance = minDistancia / matrixTraining.getColumnDimension();
+        
+        System.out.println("Deteccion: "+distance);
     }
     
     
@@ -137,7 +157,7 @@ public class FalconSVD {
             }
         }
         
-        System.out.println("minDistancia "+minDistancia);
+        System.out.println("Reconocimiento: "+minDistancia);
         
         matrixMatch = matrixTraining.getMatrix(0, matrixTraining.getRowDimension()-1, k, k);
         indexMatrixMatch = k;
@@ -212,7 +232,8 @@ public class FalconSVD {
             makeMatrixUPrima(rankMatrixTraining);
         }
         // Paso 6
-        detectionDistance(typeNorma);
+        //detectionDistance(typeNorma);
+        detectionDistance2(typeNorma);
     }
     
     

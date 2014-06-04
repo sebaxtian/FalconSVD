@@ -53,9 +53,11 @@ public class ControllerFalconRecognition {
                     normaS = "Norma Infinita";
                 }
                 registerProgress(20, "Norma seleccionada: "+normaS);
+                
                 Matrix matrixTarget = ControllerOpenTarget.imageTarget.getReduceMatrix();
                 double[] pixeles = matrixTarget.getRowPackedCopy();
                 matrixTarget = new Matrix(pixeles, matrixTarget.getRowDimension()*matrixTarget.getColumnDimension());
+                
                 registerProgress(30, "Se obtiene con exito la imagen target");
                 ControllerFalconMake.falconSVD.makeRecognition(kFaces, norma, matrixTarget);
                 registerProgress(40, "Se calcula el reconocimiento de la imagen");
