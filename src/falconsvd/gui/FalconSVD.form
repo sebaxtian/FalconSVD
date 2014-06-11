@@ -273,10 +273,16 @@
             <Property name="text" type="java.lang.String" value="Help"/>
           </Properties>
           <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem9">
+            <MenuItem class="javax.swing.JMenuItem" name="menuManual">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Manual"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menuManualActionPerformed"/>
+              </Events>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="9"/>
+              </AuxValues>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="menuAbout">
               <Properties>

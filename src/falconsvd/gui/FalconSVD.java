@@ -11,6 +11,7 @@ import falconsvd.controller.ControllerEditThreshold;
 import falconsvd.controller.ControllerFalconDetection;
 import falconsvd.controller.ControllerFalconMake;
 import falconsvd.controller.ControllerFalconRecognition;
+import falconsvd.controller.ControllerManual;
 import falconsvd.controller.ControllerOpenTarget;
 import falconsvd.controller.ControllerProcessMedia;
 import falconsvd.controller.ControllerProcessNormal;
@@ -92,7 +93,7 @@ public class FalconSVD extends javax.swing.JFrame {
         menuSaveMatch = new javax.swing.JMenuItem();
         menuSaveLog = new javax.swing.JMenuItem();
         jMenu5 = new javax.swing.JMenu();
-        jMenuItem9 = new javax.swing.JMenuItem();
+        menuManual = new javax.swing.JMenuItem();
         menuAbout = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -406,8 +407,13 @@ public class FalconSVD extends javax.swing.JFrame {
 
         jMenu5.setText("Help");
 
-        jMenuItem9.setText("Manual");
-        jMenu5.add(jMenuItem9);
+        menuManual.setText("Manual");
+        menuManual.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuManualActionPerformed(evt);
+            }
+        });
+        jMenu5.add(menuManual);
 
         menuAbout.setText("About");
         menuAbout.addActionListener(new java.awt.event.ActionListener() {
@@ -499,6 +505,11 @@ public class FalconSVD extends javax.swing.JFrame {
         ControllerAbout.actionPerformed(evt);
     }//GEN-LAST:event_menuAboutActionPerformed
 
+    private void menuManualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuManualActionPerformed
+        // TODO add your handling code here:
+        ControllerManual.actionPerformed(evt);
+    }//GEN-LAST:event_menuManualActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -555,7 +566,6 @@ public class FalconSVD extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu8;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem3;
-    private javax.swing.JMenuItem jMenuItem9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -567,6 +577,7 @@ public class FalconSVD extends javax.swing.JFrame {
     public static javax.swing.JMenuItem menuFalconDetection;
     public static javax.swing.JMenuItem menuFalconMake;
     public static javax.swing.JMenuItem menuFalconRecognition;
+    public static javax.swing.JMenuItem menuManual;
     private javax.swing.JMenuItem menuOpenTarget;
     public static javax.swing.JMenuItem menuProcessMedia;
     public static javax.swing.JMenuItem menuProcessNormal;
